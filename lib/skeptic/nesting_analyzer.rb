@@ -19,12 +19,12 @@ module Skeptic
 
     def ident(key)
       new_nesting = @current.push(key)
-
-      @nestings << new_nesting
       with(new_nesting) { yield }
     end
 
     def with(nesting)
+      @nestings << nesting
+
       old = @current
       @current = nesting
       yield
@@ -33,69 +33,78 @@ module Skeptic
 
     private
 
-    def visit(sexp)
+    def visit(tree, nesting = nil)
+      if nesting
+        with(nesting) { process tree }
+      else
+        process tree
+      end
+    end
+
+    def process(sexp)
       if Symbol === sexp[0]
         type = sexp[0]
         args = sexp.drop(1)
+        scope = @current
+
         case type
           when :if, :if_mod, :unless, :unless_mod
             condition, body, alternative = *args
             key = type.to_s.gsub(/_mod$/, '').to_sym
 
             visit condition
-            ident(key) do
-              visit body
-              visit alternative if alternative
-            end
+            visit body,        scope.push(key)
+            visit alternative, scope.push(key) if alternative
+
           when :while, :while_mod, :until, :until_mod
             condition, body = *args
             key = type.to_s.gsub(/_mod$/, '').to_sym
 
-            ident(key) do
-              visit condition
-              visit body
-            end
+            visit condition, scope.push(key)
+            visit body,      scope.push(key)
+
           when :method_add_block
             invocation, block = *args
 
             visit invocation
-            ident(:iter) { visit block }
+            visit block, scope.push(:iter)
+
           when :lambda
             params, body = *args
 
             visit params
-            ident(:lambda) { visit body }
+            visit body, scope.push(:lambda)
+
           when :for
             params, iterable, body = *args
 
             visit params
             visit iterable
-            ident(:for) { visit body }
+            visit body, scope.push(:for)
+
           when :case
             testable, alternatives = *args
 
             visit testable
-            ident(:case) { visit alternatives }
-          when :begin
-            body = args.first
+            visit alternatives, scope.push(:case)
 
-            ident(:begin) { visit body }
+          when :begin
+            visit args.first, scope.push(:begin)
+
           when :class
             name, parent, body = *args
 
-            nesting = @current.in_class extract_name(name)
-
             visit name
             visit parent if parent
-            with(nesting) { visit body }
+            visit body, scope.in_class(extract_name(name))
+
           when :def
             name, params, body = *args
 
-            nesting = @current.in_method extract_name(name)
-
             visit name
             visit params
-            with(nesting) { visit body }
+            visit body, scope.in_method(extract_name(name))
+
           else
             any sexp
         end
