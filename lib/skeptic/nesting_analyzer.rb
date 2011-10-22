@@ -1,7 +1,7 @@
 module Skeptic
   class NestingAnalyzer
     def initialize
-      @current = Nesting.new nil, nil, []
+      @current = Scope.new
       @nestings = []
     end
 
@@ -14,28 +14,28 @@ module Skeptic
     end
 
     def deepest_nesting
-      @nestings.max_by(&:size)
+      @nestings.max_by(&:depth)
     end
 
     def ident(key)
-      new_nesting = @current.push(key)
-      with(new_nesting) { yield }
+      new_scope = @current.push(key)
+      with(new_scope) { yield }
     end
 
-    def with(nesting)
-      @nestings << nesting
+    def with(scope)
+      @nestings << scope
 
       old = @current
-      @current = nesting
+      @current = scope
       yield
       @current = old
     end
 
     private
 
-    def visit(tree, nesting = nil)
-      if nesting
-        with(nesting) { process tree }
+    def visit(tree, scope = nil)
+      if scope
+        with(scope) { process tree }
       else
         process tree
       end
@@ -131,63 +131,6 @@ module Skeptic
         if Array === subtree && !(Fixnum === subtree[0])
           visit subtree
         end
-      end
-    end
-
-    class Nesting
-      attr_accessor :class_name, :method_name, :levels
-
-      def initialize(class_name, method_name, levels)
-        @class_name = class_name
-        @method_name = method_name
-        @levels = levels
-      end
-
-      def ==(other)
-        other.kind_of?(Nesting) and
-          self.class_name == other.class_name and
-          self.method_name == other.method_name and
-          self.levels == other.levels
-      end
-
-      def push(level)
-        copy { |n| n.levels.push level }
-      end
-
-      def pop
-        copy { |n| n.levels.pop }
-      end
-
-      def in_class(class_name)
-        copy { |n| n.class_name = class_name }
-      end
-
-      def in_method(method_name)
-        copy { |n| n.method_name = method_name }
-      end
-
-      def size
-        levels.length
-      end
-
-      def to_s
-        location = if class_name and method_name then "#{class_name}##{method_name}"
-          elsif class_name then "#{class_name}#[body]"
-          elsif method_name then "Object##{method_name}"
-          else "[top-level]"
-        end
-
-        "#{location} #{@levels.join(' ')}"
-      end
-
-      def inspect
-        "#<Nesting: #{to_s}>"
-      end
-
-      private
-
-      def copy(&block)
-        Nesting.new(class_name, method_name, levels.dup).tap(&block)
       end
     end
   end
