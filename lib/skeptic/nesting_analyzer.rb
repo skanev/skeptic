@@ -17,11 +17,6 @@ module Skeptic
       @nestings.max_by(&:depth)
     end
 
-    def ident(key)
-      new_scope = @current.push(key)
-      with(new_scope) { yield }
-    end
-
     def with(scope)
       @nestings << scope
 
