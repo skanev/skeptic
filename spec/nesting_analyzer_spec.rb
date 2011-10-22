@@ -71,45 +71,63 @@ module Skeptic
       end
     end
 
+    describe "nesting location" do
+      it "recognizes top-level code" do
+        nestings('a if b').should include nesting(nil, nil, :if)
+      end
+
+      it "recognizes classes" do
+        nestings('class A; a if b; end').should include nesting('A', nil, :if)
+        nestings('class A::B; a if b; end').should include nesting('A::B', nil, :if)
+      end
+
+      it "recognizes methods" do
+        nestings('def a; b if c; end').should include nesting(nil, 'a', :if)
+        nestings('class A; def b; c if d; end; end').should include nesting('A', 'b', :if)
+      end
+    end
+
     describe NestingAnalyzer::Nesting do
-      def nesting(*args)
-        NestingAnalyzer::Nesting.new(*args)
-      end
-
       it "describes a level of nesting" do
-        nesting(:for, :if).levels.should eq [:for, :if]
-        nesting.levels.should eq []
-      end
-
-      it "can be converted to a string" do
-        nesting(:begin, :for, :if).to_s.should eq "begin > for > if"
+        nesting(nil, nil, :for, :if).levels.should eq [:for, :if]
+        nesting(nil, nil).levels.should eq []
       end
 
       it "can be compared to another nesting" do
-        nesting(:for, :if).should eq nesting(:for, :if)
-        nesting(:for).should_not eq nesting(:if)
+        nesting(nil, nil, :for, :if).should eq nesting(nil, nil, :for, :if)
+        nesting(nil, nil).should_not eq nesting(nil, nil, :if)
+        nesting('Bar', nil).should_not eq nesting('Foo', nil)
+        nesting(nil, 'bar').should_not eq nesting(nil, 'foo')
       end
 
       it "can be extended and unextended" do
-        nesting(:for).push(:if).should eq nesting(:for, :if)
-        nesting(:for, :if).pop.should eq nesting(:for)
+        nesting(nil, nil, :for).push(:if).should eq nesting(nil, nil, :for, :if)
+        nesting(nil, nil, :for, :if).pop.should eq nesting(nil, nil, :for)
+        nesting(nil, nil, :for).in_class('Foo').should eq nesting('Foo', nil, :for)
+        nesting(nil, nil, :for).in_method('bar').should eq nesting(nil, 'bar', :for)
       end
 
       it "knows its size" do
-        nesting(:for).size.should eq 1
-        nesting(:for, :if).size.should eq 2
-        nesting(:for, :if, :if).size.should eq 3
+        nesting(nil, nil, :for).size.should eq 1
+        nesting(nil, nil, :for, :if).size.should eq 2
+        nesting(nil, nil, :for, :if, :if).size.should eq 3
       end
     end
 
+    def nesting(class_name, method_name, *levels)
+      NestingAnalyzer::Nesting.new(class_name, method_name, levels)
+    end
+
+    def nestings(code)
+      analyze(code).nestings
+    end
+
     def expect_a_nesting(*levels, code)
-      nesting = NestingAnalyzer::Nesting.new *levels
-      analyze(code).nestings.should include nesting
+      analyze(code).nestings.should include nesting(nil, nil, *levels)
     end
 
     def expect_deepest_nesting(*levels, code)
-      nesting = NestingAnalyzer::Nesting.new *levels
-      analyze(code).deepest_nesting.should eq nesting
+      analyze(code).deepest_nesting.should eq nesting(nil, nil, *levels)
     end
 
     def analyze(code)

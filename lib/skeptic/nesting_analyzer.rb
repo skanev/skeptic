@@ -1,7 +1,7 @@
 module Skeptic
   class NestingAnalyzer
     def initialize
-      @current = Nesting.new
+      @current = Nesting.new nil, nil, []
       @nestings = []
     end
 
@@ -18,10 +18,17 @@ module Skeptic
     end
 
     def ident(key)
-      @current = @current.push(key)
-      @nestings << @current
+      new_nesting = @current.push(key)
+
+      @nestings << new_nesting
+      with(new_nesting) { yield }
+    end
+
+    def with(nesting)
+      old = @current
+      @current = nesting
       yield
-      @current = @current.pop
+      @current = old
     end
 
     private
@@ -73,11 +80,39 @@ module Skeptic
             body = args.first
 
             ident(:begin) { visit body }
+          when :class
+            name, parent, body = *args
+
+            nesting = @current.in_class extract_name(name)
+
+            visit name
+            visit parent if parent
+            with(nesting) { visit body }
+          when :def
+            name, params, body = *args
+
+            nesting = @current.in_method extract_name(name)
+
+            visit name
+            visit params
+            with(nesting) { visit body }
           else
             any sexp
         end
       else
         any sexp
+      end
+    end
+
+    def extract_name(tree)
+      type, first, second = *tree
+      case type
+        when :const_path_ref then "#{extract_name(first)}::#{extract_name(second)}"
+        when :const_ref then extract_name(first)
+        when :var_ref then extract_name(first)
+        when :@const then first
+        when :@ident then first
+        else '<unknown>'
       end
     end
 
@@ -91,22 +126,35 @@ module Skeptic
     end
 
     class Nesting
-      attr_reader :levels
+      attr_accessor :class_name, :method_name, :levels
 
-      def initialize(*levels)
+      def initialize(class_name, method_name, levels)
+        @class_name = class_name
+        @method_name = method_name
         @levels = levels
       end
 
       def ==(other)
-        other.kind_of?(Nesting) and self.levels == other.levels
+        other.kind_of?(Nesting) and
+          self.class_name == other.class_name and
+          self.method_name == other.method_name and
+          self.levels == other.levels
       end
 
-      def push(nested_level)
-        Nesting.new *levels, nested_level
+      def push(level)
+        copy { |n| n.levels.push level }
       end
 
       def pop
-        Nesting.new *levels[0...-1]
+        copy { |n| n.levels.pop }
+      end
+
+      def in_class(class_name)
+        copy { |n| n.class_name = class_name }
+      end
+
+      def in_method(method_name)
+        copy { |n| n.method_name = method_name }
       end
 
       def size
@@ -114,7 +162,23 @@ module Skeptic
       end
 
       def to_s
-        @levels.join(" > ")
+        location = if class_name and method_name then "#{class_name}##{method_name}"
+          elsif class_name then "#{class_name}#[body]"
+          elsif method_name then "Object##{method_name}"
+          else "[top-level]"
+        end
+
+        "#{location} #{@levels.join(' ')}"
+      end
+
+      def inspect
+        "#<Nesting: #{to_s}>"
+      end
+
+      private
+
+      def copy(&block)
+        Nesting.new(class_name, method_name, levels.dup).tap(&block)
       end
     end
   end
