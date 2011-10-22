@@ -1,7 +1,7 @@
 module Skeptic
   class NestingAnalyzer
     def initialize
-      @nesting = []
+      @current = Nesting.new
       @nestings = []
     end
 
@@ -14,14 +14,14 @@ module Skeptic
     end
 
     def deepest_nesting
-      @nestings.max_by(&:length)
+      @nestings.max_by(&:size)
     end
 
     def ident(key)
-      @nesting.push key
-      @nestings << @nesting.dup
+      @current = @current.push(key)
+      @nestings << @current
       yield
-      @nesting.pop
+      @current = @current.pop
     end
 
     private
@@ -87,6 +87,34 @@ module Skeptic
         if Array === subtree && !(Fixnum === subtree[0])
           visit subtree
         end
+      end
+    end
+
+    class Nesting
+      attr_reader :levels
+
+      def initialize(*levels)
+        @levels = levels
+      end
+
+      def ==(other)
+        other.kind_of?(Nesting) and self.levels == other.levels
+      end
+
+      def push(nested_level)
+        Nesting.new *levels, nested_level
+      end
+
+      def pop
+        Nesting.new *levels[0...-1]
+      end
+
+      def size
+        levels.length
+      end
+
+      def to_s
+        @levels.join(" > ")
       end
     end
   end
