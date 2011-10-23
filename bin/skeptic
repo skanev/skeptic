@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
+require 'skeptic'
+require 'trollop'
+
+opts = Trollop::options do
+  opt :semicolons, 'Complain about semicolons', type: :boolean
+  opt :method_length, 'Maximum number of lines per method', type: :int
+  opt :max_nesting, 'Maximum nesting depth', type: :int
+  opt :methods_per_class, 'Maximum number of methods per class', type: :int
+end
+code = File.read ARGV[0]
+
+critic = Skeptic::Critic.new
+
+critic.complain_about_semicolons = opts[:semicolons]
+critic.method_length             = opts[:method_length]
+critic.max_nesting               = opts[:max_nesting]
+critic.methods_per_class         = opts[:methods_per_class]
+
+critic.criticize code
+
+if critic.criticism.empty?
+  puts 'OK'
+  exit(0)
+else
+  messages = Hash.new { |hash, key| hash[key] = [] }
+
+  critic.criticism.each do |message, type|
+    messages[type] << message
+  end
+
+  messages.each do |type, messages|
+    puts type
+    messages.each do |message|
+      puts "* #{message}"
+    end
+    puts ""
+  end
+
+  exit(1)
+end
