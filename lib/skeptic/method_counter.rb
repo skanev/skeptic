@@ -13,6 +13,10 @@ module Skeptic
       @methods[class_name].length
     end
 
+    def method_names_in(class_name)
+      @methods[class_name]
+    end
+
     def class_names
       @methods.keys
     end

@@ -35,13 +35,15 @@ module Skeptic
       copy { |n| n.method_name = method_name }
     end
 
-    def to_s
-      location = if class_name and method_name then "#{class_name}##{method_name}"
+    def location
+      if class_name and method_name then "#{class_name}##{method_name}"
         elsif class_name then "#{class_name}#[body]"
         elsif method_name then "Object##{method_name}"
         else "[top-level]"
       end
+    end
 
+    def to_s
       "#{location} #{@levels.join(':')}".strip
     end
 
