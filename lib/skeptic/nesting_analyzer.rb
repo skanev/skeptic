@@ -1,7 +1,8 @@
 module Skeptic
   class NestingAnalyzer < SexpVisitor
     def initialize
-      @current = Scope.new
+      super
+      env[:scope] = Scope.new
       @nestings = []
     end
 
@@ -20,18 +21,22 @@ module Skeptic
     def with(scope)
       @nestings << scope
 
-      @current, old = scope, @current
-      yield
-      @current = old
+      env.scoped scope: scope do
+        yield
+      end
     end
 
     private
+
+    def scope
+      env[:scope]
+    end
 
     on :class do |name, parent, body|
       visit name
       visit parent if parent
 
-      with @current.in_class(extract_name(name)) do
+      with scope.in_class(extract_name(name)) do
         visit body
       end
     end
@@ -41,7 +46,7 @@ module Skeptic
 
       visit condition
 
-      with @current.push(key) do
+      with scope.push(key) do
         visit body
         visit alternative if alternative
       end
@@ -50,7 +55,7 @@ module Skeptic
     on :while, :while_mod, :until, :until_mod do |condition, body|
       key = sexp_type.to_s.gsub(/_mod$/, '').to_sym
 
-      with @current.push(key) do
+      with scope.push(key) do
         visit condition
         visit body
       end
@@ -59,13 +64,13 @@ module Skeptic
     on :method_add_block do |invocation, block|
       visit invocation
 
-      with @current.push(:iter) do
+      with scope.push(:iter) do
         visit block
       end
     end
 
     on :lambda do |params, body|
-      with @current.push(:lambda) do
+      with scope.push(:lambda) do
         visit params
         visit body
       end
@@ -75,7 +80,7 @@ module Skeptic
       visit params
       visit iterable
 
-      with @current.push(:for) do
+      with scope.push(:for) do
         visit body
       end
     end
@@ -83,13 +88,13 @@ module Skeptic
     on :case do |testable, alternatives|
       visit testable
 
-      with @current.push(:case) do
+      with scope.push(:case) do
         visit alternatives
       end
     end
 
     on :begin do |body|
-      with @current.push(:begin) do
+      with scope.push(:begin) do
         visit body
       end
     end
@@ -98,7 +103,7 @@ module Skeptic
       visit name
       visit params
 
-      with @current.in_method(extract_name(name)) do
+      with scope.in_method(extract_name(name)) do
         visit body
       end
     end

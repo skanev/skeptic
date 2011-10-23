@@ -12,6 +12,10 @@ module Skeptic
       end
     end
 
+    def initialize
+      @env = Environment.new
+    end
+
     private
 
     def visit(sexp)
@@ -27,6 +31,10 @@ module Skeptic
           visit subtree if subtree.kind_of?(Array) and not subtree[0].kind_of?(Fixnum)
         end
       end
+    end
+
+    def env
+      @env
     end
 
     def with_sexp_type(type)
