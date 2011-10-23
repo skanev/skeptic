@@ -20,72 +20,87 @@ module Skeptic
     def with(scope)
       @nestings << scope
 
-      old = @current
-      @current = scope
+      @current, old = scope, @current
       yield
       @current = old
     end
 
     private
 
-    def visit(tree, scope = nil)
-      if scope
-        with(scope) { super(tree) }
-      else
-        super(tree)
-      end
-    end
-
     on :class do |name, parent, body|
       visit name
       visit parent if parent
-      visit body, @current.in_class(extract_name(name))
+
+      with @current.in_class(extract_name(name)) do
+        visit body
+      end
     end
 
     on :if, :if_mod, :unless, :unless_mod do |condition, body, alternative|
       key = sexp_type.to_s.gsub(/_mod$/, '').to_sym
 
       visit condition
-      visit body,        @current.push(key)
-      visit alternative, @current.push(key) if alternative
+
+      with @current.push(key) do
+        visit body
+        visit alternative if alternative
+      end
     end
 
     on :while, :while_mod, :until, :until_mod do |condition, body|
       key = sexp_type.to_s.gsub(/_mod$/, '').to_sym
 
-      visit condition, @current.push(key)
-      visit body,      @current.push(key)
+      with @current.push(key) do
+        visit condition
+        visit body
+      end
     end
 
     on :method_add_block do |invocation, block|
       visit invocation
-      visit block, @current.push(:iter)
+
+      with @current.push(:iter) do
+        visit block
+      end
     end
 
     on :lambda do |params, body|
-      visit params
-      visit body, @current.push(:lambda)
+      with @current.push(:lambda) do
+        visit params
+        visit body
+      end
     end
 
     on :for do |params, iterable, body|
       visit params
       visit iterable
-      visit body, @current.push(:for)
+
+      with @current.push(:for) do
+        visit body
+      end
     end
 
     on :case do |testable, alternatives|
       visit testable
-      visit alternatives, @current.push(:case)
+
+      with @current.push(:case) do
+        visit alternatives
+      end
     end
 
     on :begin do |body|
-      visit body, @current.push(:begin)
+      with @current.push(:begin) do
+        visit body
+      end
     end
 
     on :def do |name, params, body|
       visit name
       visit params
-      visit body, @current.in_method(extract_name(name))
+
+      with @current.in_method(extract_name(name)) do
+        visit body
+      end
     end
   end
 end
