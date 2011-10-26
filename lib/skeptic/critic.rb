@@ -40,12 +40,10 @@ module Skeptic
     def analyze_nesting
       return if max_nesting.nil?
 
-      analyzer = NestingAnalyzer.new
-      analyzer.analyze @sexp
+      analyzer = NestingAnalyzer.new(max_nesting).analyze_sexp(@sexp)
 
-      offenders = analyzer.nestings.select { |scope| scope.depth > max_nesting }
-      offenders.each do |scope|
-        add_criticism "#{scope.location} has #{scope.depth} levels of nesting: #{scope.levels.join(' > ')}", 'Deep nesting' 
+      analyzer.violations.each do |violation|
+        add_criticism violation, analyzer.rule_name
       end
     end
 

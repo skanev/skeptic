@@ -23,7 +23,7 @@ module Skeptic
         end
       RUBY
 
-      expect_criticism 'Foo#bar has 2 levels of nesting: while > if', 'Deep nesting'
+      expect_criticism 'Foo#bar has 2 levels of nesting: while > if', 'Maximum nesting depth (1)'
     end
 
     it "can locate classes with too many methods" do

@@ -87,6 +87,28 @@ module Skeptic
       end
     end
 
+    describe "reporting" do
+      it "can report methods that contain a deep level of nesting" do
+        analyzer = analyze 1, <<-RUBY
+          class Foo
+            def bar
+              while true
+                if false
+                  really?
+                end
+              end
+            end
+          end
+        RUBY
+
+        analyzer.violations.should include 'Foo#bar has 2 levels of nesting: while > if'
+      end
+
+      it "reports under 'Maximum nesting depth'" do
+        NestingAnalyzer.new(2).rule_name.should eq 'Maximum nesting depth (2)'
+      end
+    end
+
     def nestings(code)
       analyze(code).nestings
     end
@@ -103,11 +125,8 @@ module Skeptic
       analyze(code).deepest_nesting.should eq Scope.new(nil, nil, levels)
     end
 
-    def analyze(code)
-      tree = Ripper.sexp code
-      analyzer = NestingAnalyzer.new
-      analyzer.analyze tree
-      analyzer
+    def analyze(limit = nil, code)
+      NestingAnalyzer.new(limit).analyze_sexp Ripper.sexp code
     end
   end
 end

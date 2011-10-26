@@ -56,7 +56,7 @@ Feature: Running skeptic
     When I run `skeptic --max-nesting 1 input.rb`
     Then it should fail with:
       """
-      Deep nesting
+      Maximum nesting depth (1)
       * Foo#bar has 2 levels of nesting: while > if
       """
 

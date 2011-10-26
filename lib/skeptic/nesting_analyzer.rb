@@ -1,29 +1,43 @@
 module Skeptic
   class NestingAnalyzer < SexpVisitor
-    def initialize
-      super
+    def initialize(limit = nil)
+      super()
       env[:scope] = Scope.new
-      @nestings = []
+      @scopes = []
+      @limit  = limit
     end
 
-    def analyze(tree)
+    def analyze_sexp(tree)
       visit tree
+      self
     end
 
     def nestings
-      @nestings.uniq
+      @scopes.uniq
     end
 
     def deepest_nesting
-      @nestings.max_by(&:depth)
+      @scopes.max_by(&:depth)
     end
 
     def with(scope)
-      @nestings << scope
+      @scopes << scope
 
       env.scoped scope: scope do
         yield
       end
+    end
+
+    def violations
+      return [] if @limit.nil?
+
+      @scopes.select { |scope| scope.depth > @limit }.map do |scope|
+        "#{scope.location} has #{scope.depth} levels of nesting: #{scope.levels.join(' > ')}"
+      end
+    end
+
+    def rule_name
+      "Maximum nesting depth (#@limit)"
     end
 
     private
