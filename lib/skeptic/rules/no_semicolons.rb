@@ -22,12 +22,8 @@ module Skeptic
         'No semicolons as expression separators'
       end
 
-      def offending_spots
+      def semicolon_locations
         @locations
-      end
-
-      def complaining?
-        not @locations.empty?
       end
     end
   end

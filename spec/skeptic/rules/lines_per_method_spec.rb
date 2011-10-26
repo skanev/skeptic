@@ -32,22 +32,6 @@ module Skeptic
             end
           RUBY
         end
-
-        it "can tell the names of the methods found" do
-          analyzer = analyze <<-RUBY
-            class Foo
-              def bar; end
-              def baz; end
-            end
-
-            class Qux
-              def waldo; end
-              def plugh; end
-            end
-          RUBY
-
-          analyzer.method_names.should =~ %w[Foo#bar Foo#baz Qux#waldo Qux#plugh]
-        end
       end
 
       describe "reporting" do

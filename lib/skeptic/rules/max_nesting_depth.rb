@@ -18,18 +18,6 @@ module Skeptic
         @scopes.uniq
       end
 
-      def deepest_nesting
-        @scopes.max_by(&:depth)
-      end
-
-      def with(scope)
-        @scopes << scope
-
-        env.scoped scope: scope do
-          yield
-        end
-      end
-
       def violations
         @scopes.select { |scope| scope.depth > @limit }.map do |scope|
           "#{scope.location} has #{scope.depth} levels of nesting: #{scope.levels.join(' > ')}"
@@ -41,6 +29,14 @@ module Skeptic
       end
 
       private
+
+      def with(scope)
+        @scopes << scope
+
+        env.scoped scope: scope do
+          yield
+        end
+      end
 
       def scope
         env[:scope]

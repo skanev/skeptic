@@ -17,7 +17,7 @@ module Skeptic
         end
 
         it "can tell the locations of the semicolons" do
-          analyze("foo;\n;bar").offending_spots.should =~ [[1, 3], [2, 0]]
+          analyze("foo;\n;bar").semicolon_locations.should =~ [[1, 3], [2, 0]]
         end
       end
 
@@ -34,11 +34,11 @@ module Skeptic
       end
 
       def expect_fine_and_dandy(code)
-        analyze(code).should_not be_complaining
+        analyze(code).semicolon_locations.should be_empty
       end
 
       def expect_complaint(code)
-        analyze(code).should be_complaining
+        analyze(code).semicolon_locations.should_not be_empty
       end
 
       def analyze(code)

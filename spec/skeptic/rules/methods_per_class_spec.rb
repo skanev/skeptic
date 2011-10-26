@@ -48,15 +48,6 @@ module Skeptic
           counter.methods_in('Bar').should eq 1
         end
 
-        it "can tell names of the classes found" do
-          counter = analyze <<-RUBY
-            class Foo; def name; end; end
-            class Bar; def name; end; end
-          RUBY
-
-          counter.class_names.should =~ %w[Foo Bar]
-        end
-
         it "recognizes qualified module names" do
           expect_method_count 'Foo::Bar', 1, <<-RUBY
             class Foo::Bar; def baz; end; end

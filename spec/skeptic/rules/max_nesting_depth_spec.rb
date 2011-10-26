@@ -123,7 +123,7 @@ module Skeptic
       end
 
       def expect_deepest_nesting(*levels, code)
-        analyze(code).deepest_nesting.should eq Scope.new(nil, nil, levels)
+        analyze(code).nestings.max_by(&:depth).should eq Scope.new(nil, nil, levels)
       end
 
       def analyze(limit = nil, code)

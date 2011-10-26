@@ -14,10 +14,6 @@ module Skeptic
         self
       end
 
-      def method_names
-        @line_counts.keys
-      end
-
       def size_of(qualified_method_name)
         @line_counts[qualified_method_name]
       end
