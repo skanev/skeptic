@@ -7,7 +7,7 @@ module Skeptic
     it "can locate semicolons in the code" do
       criticize 'foo; bar', complain_about_semicolons: true
 
-      expect_criticism 'You have a semicolon at line 1, column 3', 'Semicolons'
+      expect_criticism 'You have a semicolon at line 1, column 3', 'No semicolons as expression separators'
     end
 
     it "can locate deep levels of nesting" do

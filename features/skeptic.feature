@@ -18,7 +18,7 @@ Feature: Running skeptic
     When I run `skeptic --semicolons input.rb`
     Then it should fail with:
       """
-      Semicolons
+      No semicolons as expression separators
       * You have a semicolon at line 1, column 3
       """
 

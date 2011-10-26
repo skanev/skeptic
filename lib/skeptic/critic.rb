@@ -12,8 +12,9 @@ module Skeptic
     end
 
     def criticize(code)
-      @code = code
-      @sexp = Ripper.sexp(code)
+      @code   = code
+      @tokens = Ripper.lex(code)
+      @sexp   = Ripper.sexp(code)
 
       look_for_semicolons
       analyze_nesting
@@ -28,12 +29,10 @@ module Skeptic
     end
 
     def look_for_semicolons
-      return unless complain_about_semicolons
+      analyzer = SemicolonDetector.new(complain_about_semicolons).analyze_tokens(@tokens)
 
-      detector = SemicolonDetector.new
-      detector.analyze @code
-      detector.offending_spots.each do |line, column|
-        add_criticism "You have a semicolon at line #{line}, column #{column}", 'Semicolons'
+      analyzer.violations.each do |violation|
+        add_criticism violation, analyzer.rule_name
       end
     end
 
