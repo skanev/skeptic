@@ -26,8 +26,6 @@ module Skeptic
       end
 
       def violations
-        return [] if @limit.nil?
-
         violators = @methods.keys.select { |name| @methods[name].length > @limit }
 
         violators.map do |class_name|

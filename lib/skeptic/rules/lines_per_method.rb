@@ -23,8 +23,6 @@ module Skeptic
       end
 
       def violations
-        return [] if @limit.nil?
-
         @line_counts.select { |name, lines| lines > @limit }.map do |name, lines|
           "#{name} is #{lines} lines long"
         end

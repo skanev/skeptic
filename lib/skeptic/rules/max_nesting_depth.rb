@@ -31,8 +31,6 @@ module Skeptic
       end
 
       def violations
-        return [] if @limit.nil?
-
         @scopes.select { |scope| scope.depth > @limit }.map do |scope|
           "#{scope.location} has #{scope.depth} levels of nesting: #{scope.levels.join(' > ')}"
         end
