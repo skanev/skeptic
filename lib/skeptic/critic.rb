@@ -17,10 +17,10 @@ module Skeptic
       @sexp   = Ripper.sexp(code)
 
       rules = {
-        SemicolonDetector  => complain_about_semicolons,
-        NestingAnalyzer    => max_nesting,
-        MethodCounter      => methods_per_class,
-        MethodSizeAnalyzer => method_length,
+        Rules::SemicolonDetector  => complain_about_semicolons,
+        Rules::NestingAnalyzer    => max_nesting,
+        Rules::MethodCounter      => methods_per_class,
+        Rules::MethodSizeAnalyzer => method_length,
       }
 
       rules.reject { |rule, option| option.nil? }.each do |rule, option|
