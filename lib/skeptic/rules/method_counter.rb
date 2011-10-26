@@ -1,6 +1,8 @@
 module Skeptic
   module Rules
-    class MethodCounter < SexpVisitor
+    class MethodCounter
+      include SexpVisitor
+
       def initialize(limit)
         super()
 

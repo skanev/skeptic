@@ -1,6 +1,8 @@
 module Skeptic
   module Rules
-    class NestingAnalyzer < SexpVisitor
+    class NestingAnalyzer
+      include SexpVisitor
+
       def initialize(limit = nil)
         super()
         env[:scope] = Scope.new
