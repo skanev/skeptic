@@ -52,13 +52,10 @@ module Skeptic
     def analyze_method_count
       return if methods_per_class.nil?
 
-      analyzer = MethodCounter.new
-      analyzer.analyze @sexp
+      analyzer = MethodCounter.new(methods_per_class).analyze_sexp(@sexp)
 
-      offenders = analyzer.class_names.select { |class_name| analyzer.methods_in(class_name) > methods_per_class }
-      offenders.each do |class_name|
-        methods = analyzer.method_names_in(class_name).map { |name| "##{name}" }
-        add_criticism "#{class_name} has #{methods.size} methods: #{methods.join(', ')}", 'Number of methods per class'
+      analyzer.violations.each do |violation|
+        add_criticism violation, analyzer.rule_name
       end
     end
 

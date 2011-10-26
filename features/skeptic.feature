@@ -71,6 +71,6 @@ Feature: Running skeptic
     When I run `skeptic --methods-per-class 1 input.rb`
     Then it should fail with:
       """
-      Number of methods per class
+      Number of methods per class (1)
       * Foo has 2 methods: #bar, #baz
       """

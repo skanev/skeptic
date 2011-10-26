@@ -1,12 +1,15 @@
 module Skeptic
   class MethodCounter < SexpVisitor
-    def initialize
-      super
+    def initialize(limit)
+      super()
+
       @methods = Hash.new { |hash, key| hash[key] = [] }
+      @limit   = limit
     end
 
-    def analyze(tree)
+    def analyze_sexp(tree)
       visit tree
+      self
     end
 
     def methods_in(class_name)
@@ -19,6 +22,23 @@ module Skeptic
 
     def class_names
       @methods.keys
+    end
+
+    def violations
+      return [] if @limit.nil?
+
+      violators = @methods.keys.select { |name| @methods[name].length > @limit }
+
+      violators.map do |class_name|
+        method_names = @methods[class_name].map { |name| "##{name}" }
+        count        = method_names.length
+
+        "#{class_name} has #{count} methods: #{method_names.join(', ')}"
+      end
+    end
+
+    def rule_name
+      "Number of methods per class (#@limit)"
     end
 
     private

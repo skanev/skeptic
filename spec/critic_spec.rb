@@ -34,7 +34,7 @@ module Skeptic
         end
       RUBY
 
-      expect_criticism 'Foo has 2 methods: #bar, #baz', 'Number of methods per class'
+      expect_criticism 'Foo has 2 methods: #bar, #baz', 'Number of methods per class (1)'
     end
 
     it "can locate methods that are too long" do
