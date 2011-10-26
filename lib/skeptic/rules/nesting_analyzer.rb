@@ -4,7 +4,6 @@ module Skeptic
       include SexpVisitor
 
       def initialize(limit = nil)
-        super()
         env[:scope] = Scope.new
         @scopes = []
         @limit  = limit

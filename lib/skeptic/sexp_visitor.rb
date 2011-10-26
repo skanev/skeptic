@@ -18,10 +18,6 @@ module Skeptic
     end
 
     module InstanceMethods
-      def initialize
-        @env = Environment.new
-      end
-
       private
 
       def visit(sexp)
@@ -40,7 +36,7 @@ module Skeptic
       end
 
       def env
-        @env
+        @env ||= Environment.new
       end
 
       def with_sexp_type(type)

@@ -4,8 +4,6 @@ module Skeptic
       include SexpVisitor
 
       def initialize(limit)
-        super()
-
         @methods = Hash.new { |hash, key| hash[key] = [] }
         @limit   = limit
       end

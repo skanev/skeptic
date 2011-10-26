@@ -4,8 +4,6 @@ module Skeptic
       include SexpVisitor
 
       def initialize(limit = nil)
-        super()
-
         env[:line_numbers] = []
         @line_counts = {}
         @limit = limit
