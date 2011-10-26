@@ -1,14 +1,16 @@
 module Skeptic
   class MethodSizeAnalyzer < SexpVisitor
-    def initialize
-      super
+    def initialize(limit = nil)
+      super()
 
       env[:line_numbers] = []
       @line_counts = {}
+      @limit = limit
     end
 
-    def analyze(sexp)
+    def analyze_sexp(sexp)
       visit sexp
+      self
     end
 
     def method_names
@@ -17,6 +19,18 @@ module Skeptic
 
     def size_of(qualified_method_name)
       @line_counts[qualified_method_name]
+    end
+
+    def violations
+      return [] if @limit.nil?
+
+      @line_counts.select { |name, lines| lines > @limit }.map do |name, lines|
+        "#{name} is #{lines} lines long"
+      end
+    end
+
+    def rule_name
+      "Number of lines per method (#@limit)"
     end
 
     private

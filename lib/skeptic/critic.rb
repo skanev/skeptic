@@ -62,13 +62,10 @@ module Skeptic
     def analyze_method_length
       return if method_length.nil?
 
-      analyzer = MethodSizeAnalyzer.new
-      analyzer.analyze @sexp
+      analyzer = MethodSizeAnalyzer.new(method_length).analyze_sexp(@sexp)
 
-      offenders = analyzer.method_names.select { |name| analyzer.size_of(name) > method_length }
-      offenders.each do |method|
-        size = analyzer.size_of(method)
-        add_criticism "#{method} is #{size} lines long", 'Number of lines per method'
+      analyzer.violations.each do |violation|
+        add_criticism violation, analyzer.rule_name
       end
     end
   end

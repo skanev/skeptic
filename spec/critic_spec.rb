@@ -48,7 +48,7 @@ module Skeptic
         end
       RUBY
 
-      expect_criticism 'Foo#bar is 3 lines long', 'Number of lines per method'
+      expect_criticism 'Foo#bar is 3 lines long', 'Number of lines per method (1)'
     end
 
     def criticize(code, options)

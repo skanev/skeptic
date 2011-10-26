@@ -36,7 +36,7 @@ Feature: Running skeptic
     When I run `skeptic --method-length 2 input.rb`
     Then it should fail with:
       """
-      Number of lines per method
+      Number of lines per method (2)
       * Foo#bar is 3 lines long
       """
 
