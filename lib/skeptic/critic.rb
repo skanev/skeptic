@@ -1,9 +1,9 @@
 module Skeptic
   class Critic
-    attr_accessor :complain_about_semicolons
-    attr_accessor :max_nesting
+    attr_accessor :lines_per_method
+    attr_accessor :max_nesting_depth
     attr_accessor :methods_per_class
-    attr_accessor :method_length
+    attr_accessor :no_semicolons
 
     attr_reader :criticism
 
@@ -17,10 +17,10 @@ module Skeptic
       @sexp   = Ripper.sexp(code)
 
       rules = {
-        Rules::NoSemicolons    => complain_about_semicolons,
-        Rules::MaxNestingDepth => max_nesting,
+        Rules::LinesPerMethod  => lines_per_method,
+        Rules::MaxNestingDepth => max_nesting_depth,
         Rules::MethodsPerClass => methods_per_class,
-        Rules::LinesPerMethod  => method_length,
+        Rules::NoSemicolons    => no_semicolons,
       }
 
       rules.reject { |rule_type, option| option.nil? }.each do |rule_type, option|

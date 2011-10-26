@@ -5,13 +5,13 @@ module Skeptic
     let(:critic) { Critic.new }
 
     it "can locate semicolons in the code" do
-      criticize 'foo; bar', complain_about_semicolons: true
+      criticize 'foo; bar', no_semicolons: true
 
       expect_criticism 'You have a semicolon at line 1, column 3', 'No semicolons as expression separators'
     end
 
     it "can locate deep levels of nesting" do
-      criticize <<-RUBY, max_nesting: 1
+      criticize <<-RUBY, max_nesting_depth: 1
         class Foo
           def bar
             while true
@@ -38,7 +38,7 @@ module Skeptic
     end
 
     it "can locate methods that are too long" do
-      criticize <<-RUBY, method_length: 1
+      criticize <<-RUBY, lines_per_method: 1
         class Foo
           def bar
             one

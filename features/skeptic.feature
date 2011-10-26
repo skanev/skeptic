@@ -15,7 +15,7 @@ Feature: Running skeptic
       """
       foo; bar
       """
-    When I run `skeptic --semicolons input.rb`
+    When I run `skeptic --no-semicolons input.rb`
     Then it should fail with:
       """
       No semicolons as expression separators
@@ -33,7 +33,7 @@ Feature: Running skeptic
         end
       end
       """
-    When I run `skeptic --method-length 2 input.rb`
+    When I run `skeptic --lines-per-method 2 input.rb`
     Then it should fail with:
       """
       Number of lines per method (2)
@@ -53,7 +53,7 @@ Feature: Running skeptic
         end
       end
       """
-    When I run `skeptic --max-nesting 1 input.rb`
+    When I run `skeptic --max-nesting-depth 1 input.rb`
     Then it should fail with:
       """
       Maximum nesting depth (1)
