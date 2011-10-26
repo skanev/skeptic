@@ -1,6 +1,6 @@
 module Skeptic
   module Rules
-    class MethodCounter
+    class MethodsPerClass
       include SexpVisitor
 
       def initialize(limit)

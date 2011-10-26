@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Skeptic
   module Rules
-    describe MethodSizeAnalyzer do
+    describe LinesPerMethod do
       describe "calculating method size" do
         it "can count the size of a method" do
           code = <<-RUBY
@@ -66,7 +66,7 @@ module Skeptic
         end
 
         it "reports under 'Number of lines per method'" do
-          MethodSizeAnalyzer.new(2).rule_name.should eq 'Number of lines per method (2)'
+          LinesPerMethod.new(2).rule_name.should eq 'Number of lines per method (2)'
         end
       end
 
@@ -76,7 +76,7 @@ module Skeptic
       end
 
       def analyze(limit = nil, code)
-        MethodSizeAnalyzer.new(limit).apply_to nil, Ripper.sexp(code)
+        LinesPerMethod.new(limit).apply_to nil, Ripper.sexp(code)
       end
     end
   end

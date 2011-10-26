@@ -1,6 +1,6 @@
 module Skeptic
   module Rules
-    class MethodSizeAnalyzer
+    class LinesPerMethod
       include SexpVisitor
 
       def initialize(limit = nil)

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Skeptic
   module Rules
-    describe SemicolonDetector do
+    describe NoSemicolons do
       describe "detecting semicolons" do
         it "complains if it finds a semicolon in the code" do
           expect_complaint 'foo; bar'
@@ -29,7 +29,7 @@ module Skeptic
         end
 
         it "reports under 'No semicolons'" do
-          SemicolonDetector.new(true).rule_name.should eq 'No semicolons as expression separators'
+          NoSemicolons.new(true).rule_name.should eq 'No semicolons as expression separators'
         end
       end
 
@@ -42,7 +42,7 @@ module Skeptic
       end
 
       def analyze(code)
-        SemicolonDetector.new(true).apply_to Ripper.lex(code), nil
+        NoSemicolons.new(true).apply_to Ripper.lex(code), nil
       end
     end
   end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Skeptic
   module Rules
-    describe MethodCounter do
+    describe MethodsPerClass do
       describe "counting methods" do
         it "counts methods defined in classes" do
           expect_method_count 'Foo', 2, <<-RUBY
@@ -83,12 +83,12 @@ module Skeptic
         end
 
         it "reports under 'Number of methods per class'" do
-          MethodCounter.new(42).rule_name.should eq 'Number of methods per class (42)'
+          MethodsPerClass.new(42).rule_name.should eq 'Number of methods per class (42)'
         end
       end
 
       def analyze(limit = nil, code)
-        MethodCounter.new(limit).apply_to nil, Ripper.sexp(code)
+        MethodsPerClass.new(limit).apply_to nil, Ripper.sexp(code)
       end
 
       def expect_method_count(class_name, count, code)

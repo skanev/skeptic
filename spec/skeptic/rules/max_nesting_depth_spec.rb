@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Skeptic
   module Rules
-    describe NestingAnalyzer do
+    describe MaxNestingDepth do
       describe "structure analysis" do
         it "counts all conditional forms as a level of nesting" do
           expect_deepest_nesting :if, 'if condition?; action; end'
@@ -106,7 +106,7 @@ module Skeptic
         end
 
         it "reports under 'Maximum nesting depth'" do
-          NestingAnalyzer.new(2).rule_name.should eq 'Maximum nesting depth (2)'
+          MaxNestingDepth.new(2).rule_name.should eq 'Maximum nesting depth (2)'
         end
       end
 
@@ -127,7 +127,7 @@ module Skeptic
       end
 
       def analyze(limit = nil, code)
-        NestingAnalyzer.new(limit).apply_to nil, Ripper.sexp(code)
+        MaxNestingDepth.new(limit).apply_to nil, Ripper.sexp(code)
       end
     end
   end

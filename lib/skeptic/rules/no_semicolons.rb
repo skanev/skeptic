@@ -1,6 +1,6 @@
 module Skeptic
   module Rules
-    class SemicolonDetector
+    class NoSemicolons
       def initialize(enabled = false)
         @enabled = enabled
       end

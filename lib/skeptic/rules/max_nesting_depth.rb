@@ -1,6 +1,6 @@
 module Skeptic
   module Rules
-    class NestingAnalyzer
+    class MaxNestingDepth
       include SexpVisitor
 
       def initialize(limit = nil)
