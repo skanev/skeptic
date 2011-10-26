@@ -23,13 +23,12 @@ module Skeptic
         Rules::MethodSizeAnalyzer => method_length,
       }
 
-      rules.reject { |rule, option| option.nil? }.each do |rule, option|
-        analyzer = rule.new(option)
-        analyzer.analyze_sexp @sexp if analyzer.respond_to? :analyze_sexp
-        analyzer.analyze_tokens @tokens if analyzer.respond_to? :analyze_tokens
+      rules.reject { |rule_type, option| option.nil? }.each do |rule_type, option|
+        rule = rule_type.new(option)
+        rule.apply_to @tokens, @sexp
 
-        analyzer.violations.each do |violation|
-          @criticism << [violation, analyzer.rule_name]
+        rule.violations.each do |violation|
+          @criticism << [violation, rule.rule_name]
         end
       end
     end

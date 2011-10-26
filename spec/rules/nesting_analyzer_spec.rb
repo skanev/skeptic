@@ -127,7 +127,7 @@ module Skeptic
       end
 
       def analyze(limit = nil, code)
-        NestingAnalyzer.new(limit).analyze_sexp Ripper.sexp code
+        NestingAnalyzer.new(limit).apply_to nil, Ripper.sexp(code)
       end
     end
   end

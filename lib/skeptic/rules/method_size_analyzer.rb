@@ -9,7 +9,7 @@ module Skeptic
         @limit = limit
       end
 
-      def analyze_sexp(sexp)
+      def apply_to(tokens, sexp)
         visit sexp
         self
       end

@@ -5,7 +5,7 @@ module Skeptic
         @enabled = enabled
       end
 
-      def analyze_tokens(tokens)
+      def apply_to(tokens, sexp)
         @locations = tokens.
           select { |location, type, token| token == ';' and type == :on_semicolon }.
           map { |location, type, token| location }

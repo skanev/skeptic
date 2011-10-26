@@ -9,8 +9,8 @@ module Skeptic
         @limit  = limit
       end
 
-      def analyze_sexp(tree)
-        visit tree
+      def apply_to(tokens, sexp)
+        visit sexp
         self
       end
 

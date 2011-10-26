@@ -76,7 +76,7 @@ module Skeptic
       end
 
       def analyze(limit = nil, code)
-        MethodSizeAnalyzer.new(limit).analyze_sexp Ripper.sexp(code)
+        MethodSizeAnalyzer.new(limit).apply_to nil, Ripper.sexp(code)
       end
     end
   end

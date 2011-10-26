@@ -88,8 +88,7 @@ module Skeptic
       end
 
       def analyze(limit = nil, code)
-        sexp = Ripper.sexp(code)
-        MethodCounter.new(limit).analyze_sexp(sexp)
+        MethodCounter.new(limit).apply_to nil, Ripper.sexp(code)
       end
 
       def expect_method_count(class_name, count, code)

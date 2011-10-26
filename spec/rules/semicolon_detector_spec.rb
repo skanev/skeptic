@@ -42,7 +42,7 @@ module Skeptic
       end
 
       def analyze(code)
-        SemicolonDetector.new(true).analyze_tokens Ripper.lex(code)
+        SemicolonDetector.new(true).apply_to Ripper.lex(code), nil
       end
     end
   end
