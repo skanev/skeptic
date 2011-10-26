@@ -24,7 +24,7 @@ module Skeptic
         end
       end
 
-      def rule_name
+      def name
         "Number of lines per method (#@limit)"
       end
 

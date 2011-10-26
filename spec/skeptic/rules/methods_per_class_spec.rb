@@ -74,7 +74,7 @@ module Skeptic
         end
 
         it "reports under 'Number of methods per class'" do
-          MethodsPerClass.new(42).rule_name.should eq 'Number of methods per class (42)'
+          MethodsPerClass.new(42).name.should eq 'Number of methods per class (42)'
         end
       end
 

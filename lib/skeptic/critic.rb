@@ -28,7 +28,7 @@ module Skeptic
         rule.apply_to @tokens, @sexp
 
         rule.violations.each do |violation|
-          @criticism << [violation, rule.rule_name]
+          @criticism << [violation, rule.name]
         end
       end
     end

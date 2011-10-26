@@ -18,7 +18,7 @@ module Skeptic
         end
       end
 
-      def rule_name
+      def name
         'No semicolons as expression separators'
       end
 

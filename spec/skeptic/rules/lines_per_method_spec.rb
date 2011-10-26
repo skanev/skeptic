@@ -50,7 +50,7 @@ module Skeptic
         end
 
         it "reports under 'Number of lines per method'" do
-          LinesPerMethod.new(2).rule_name.should eq 'Number of lines per method (2)'
+          LinesPerMethod.new(2).name.should eq 'Number of lines per method (2)'
         end
       end
 

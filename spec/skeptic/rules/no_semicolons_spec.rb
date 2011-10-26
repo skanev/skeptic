@@ -29,7 +29,7 @@ module Skeptic
         end
 
         it "reports under 'No semicolons'" do
-          NoSemicolons.new(true).rule_name.should eq 'No semicolons as expression separators'
+          NoSemicolons.new(true).name.should eq 'No semicolons as expression separators'
         end
       end
 

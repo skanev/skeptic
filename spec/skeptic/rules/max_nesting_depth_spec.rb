@@ -106,7 +106,7 @@ module Skeptic
         end
 
         it "reports under 'Maximum nesting depth'" do
-          MaxNestingDepth.new(2).rule_name.should eq 'Maximum nesting depth (2)'
+          MaxNestingDepth.new(2).name.should eq 'Maximum nesting depth (2)'
         end
       end
 

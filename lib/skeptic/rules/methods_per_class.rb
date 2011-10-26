@@ -28,7 +28,7 @@ module Skeptic
         end
       end
 
-      def rule_name
+      def name
         "Number of methods per class (#@limit)"
       end
 
