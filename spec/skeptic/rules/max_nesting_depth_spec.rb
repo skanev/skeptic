@@ -3,6 +3,10 @@ require 'spec_helper'
 module Skeptic
   module Rules
     describe MaxNestingDepth do
+      it_behaves_like 'Rule' do
+        subject { MaxNestingDepth.new 10 }
+      end
+
       describe "structure analysis" do
         it "counts all conditional forms as a level of nesting" do
           expect_deepest_nesting :if, 'if condition?; action; end'

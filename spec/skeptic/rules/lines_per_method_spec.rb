@@ -3,6 +3,10 @@ require 'spec_helper'
 module Skeptic
   module Rules
     describe LinesPerMethod do
+      it_behaves_like 'Rule' do
+        subject { LinesPerMethod.new 10 }
+      end
+
       describe "calculating method size" do
         it "can count the size of a method" do
           code = <<-RUBY

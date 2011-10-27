@@ -4,6 +4,10 @@ require 'spec_helper'
 module Skeptic
   module Rules
     describe LineLength do
+      it_behaves_like 'Rule' do
+        subject { LineLength.new(10) }
+      end
+
       describe "detecting long lines" do
         it "calculates the length of the lines" do
           expect_longest_line 2, 9, code(<<-RUBY)

@@ -3,6 +3,10 @@ require 'spec_helper'
 module Skeptic
   module Rules
     describe MethodsPerClass do
+      it_behaves_like 'Rule' do
+        subject { MethodsPerClass.new 10 }
+      end
+
       describe "counting methods" do
         it "counts methods defined in classes" do
           expect_method_count 'Foo', 2, <<-RUBY

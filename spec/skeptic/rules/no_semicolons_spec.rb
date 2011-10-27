@@ -3,6 +3,10 @@ require 'spec_helper'
 module Skeptic
   module Rules
     describe NoSemicolons do
+      it_behaves_like 'Rule' do
+        subject { NoSemicolons.new }
+      end
+
       describe "detecting semicolons" do
         it "complains if it finds a semicolon in the code" do
           expect_complaint 'foo; bar'
