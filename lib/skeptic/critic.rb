@@ -18,7 +18,7 @@ module Skeptic
       @sexp   = Ripper.sexp(code)
 
       Rules.table.each_rule do |rule_class, slug, option|
-        next if send(slug).nil?
+        next unless send(slug)
 
         rule = rule_class.new send(slug)
         rule.apply_to @code, @tokens, @sexp
