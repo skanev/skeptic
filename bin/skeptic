@@ -8,6 +8,7 @@ opts = Trollop::options do
   opt :max_nesting_depth, 'Maximum nesting depth', type: :int
   opt :methods_per_class, 'Maximum number of methods per class', type: :int
   opt :no_semicolons,     'Complain about semicolons', type: :boolean
+  opt :line_length,       'Line length', type: :int
 end
 code = File.read ARGV[0]
 
@@ -17,6 +18,7 @@ critic.no_semicolons     = opts[:no_semicolons]
 critic.max_nesting_depth = opts[:max_nesting_depth]
 critic.methods_per_class = opts[:methods_per_class]
 critic.lines_per_method  = opts[:lines_per_method]
+critic.line_length       = opts[:line_length]
 
 critic.criticize code
 

@@ -74,3 +74,16 @@ Feature: Running skeptic
       Number of methods per class (1)
       * Foo has 2 methods: #bar, #baz
       """
+
+  Scenario: Limiting line length
+    Given a file named "input.rb" with:
+      """
+      short line
+      longer line
+      """
+    When I run `skeptic --line-length 10 input.rb`
+    Then it should fail with:
+      """
+      Line length (10)
+      * Line 2 is too long: 11 columns
+      """
