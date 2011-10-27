@@ -2,8 +2,6 @@ require 'spec_helper'
 
 module Skeptic
   describe Critic do
-    let(:critic) { Critic.new }
-
     it "can locate semicolons in the code" do
       criticize 'foo; bar', no_semicolons: true
 
@@ -52,15 +50,13 @@ module Skeptic
     end
 
     def criticize(code, options)
-      options.each do |key, value|
-        critic.send "#{key}=", value
-      end
-
-      critic.criticize code
+      @critic = Critic.new options
+      @critic.criticize code
+      @critic
     end
 
     def expect_criticism(message, type)
-      critic.criticism.should include [message, type]
+      @critic.criticism.should include [message, type]
     end
   end
 end

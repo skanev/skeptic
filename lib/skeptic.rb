@@ -10,4 +10,6 @@ require 'skeptic/rules/lines_per_method'
 require 'skeptic/rules/no_semicolons'
 require 'skeptic/rules/line_length'
 
+require 'skeptic/rule_table'
+require 'skeptic/rules'
 require 'skeptic/critic'

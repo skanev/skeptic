@@ -1,6 +1,8 @@
 module Skeptic
   module Rules
     class LinesPerMethod
+      DESCRIPTION = 'Limit the number of lines in each method'
+
       include SexpVisitor
 
       def initialize(limit = nil)

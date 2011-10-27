@@ -1,6 +1,8 @@
 module Skeptic
   module Rules
     class MethodsPerClass
+      DESCRIPTION = 'Limit the number of methods per class'
+
       include SexpVisitor
 
       def initialize(limit)

@@ -1,6 +1,8 @@
 module Skeptic
   module Rules
     class LineLength
+      DESCRIPTION = 'Limit the line length'
+
       attr_reader :line_lengths
 
       def initialize(limit)

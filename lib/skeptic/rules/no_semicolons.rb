@@ -1,6 +1,8 @@
 module Skeptic
   module Rules
     class NoSemicolons
+      DESCRIPTION = 'Do not allow semicolons as statement separators'
+
       def initialize(enabled = false)
         @enabled = enabled
       end
