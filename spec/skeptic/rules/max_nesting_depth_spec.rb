@@ -74,6 +74,12 @@ module Skeptic
         it "does not count the if condition as a level of nesting" do
           expect_a_nesting :iter, 'a if b { c }'
         end
+
+        it "counts the ternary if as a level of nesting" do
+          expect_a_nesting :ternary_if, 'a ? b : c'
+          expect_a_nesting :ternary_if, :iter, 'a ? b { } : c'
+          expect_a_nesting :ternary_if, :iter, 'a ? b : c { } '
+        end
       end
 
       describe "nesting location" do

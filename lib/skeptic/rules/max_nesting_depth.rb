@@ -64,6 +64,14 @@ module Skeptic
         end
       end
 
+      on :ifop do |condition, true_branch, false_branch|
+        with scope.push(:ternary_if) do
+          visit condition
+          visit true_branch
+          visit false_branch
+        end
+      end
+
       on :while, :while_mod, :until, :until_mod do |condition, body|
         key = sexp_type.to_s.gsub(/_mod$/, '').to_sym
 
