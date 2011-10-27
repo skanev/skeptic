@@ -3,13 +3,30 @@ $LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
 require 'skeptic'
 require 'trollop'
 
-opts = Trollop::options do
+parser = Trollop::Parser.new do
+  banner <<BANNER
+Points out annoying things in your Ruby code. Just run with:
+
+  skeptic [options] <path_to_file>
+
+where [options] are:
+BANNER
   Skeptic::Rules.table.each_rule do |klass, slug, option_type, description|
     opt slug, description, type: option_type
   end
+  opt :file, 'Path to file to analyze', type: :string
 end
-code = File.read ARGV[0]
 
+opts = Trollop::with_standard_exception_handling parser do
+  parsed = parser.parse ARGV
+  parsed[:file] ||= ARGV.shift unless parsed[:file_given]
+  raise Trollop::HelpNeeded unless parsed[:file]
+  raise Trollop::CommandlineError, "excessive arguments: #{ARGV.join(' ')}" unless ARGV.empty?
+  raise Trollop::CommandlineError, "file does not exist: #{parsed[:file]}" unless File.exist? parsed[:file]
+  parsed
+end
+
+code = File.read opts[:file]
 critic = Skeptic::Critic.new opts.select { |key, value| Skeptic::Rules.table.slugs.include? key }
 critic.criticize code
 
