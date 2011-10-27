@@ -8,7 +8,7 @@ module Skeptic
         @limit   = limit
       end
 
-      def apply_to(tokens, tree)
+      def apply_to(code, tokens, tree)
         visit tree
         self
       end

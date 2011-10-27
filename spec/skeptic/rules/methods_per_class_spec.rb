@@ -79,7 +79,7 @@ module Skeptic
       end
 
       def analyze(limit = nil, code)
-        MethodsPerClass.new(limit).apply_to nil, Ripper.sexp(code)
+        apply_rule MethodsPerClass, limit, code
       end
 
       def expect_method_count(class_name, count, code)

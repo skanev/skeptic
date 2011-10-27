@@ -60,7 +60,7 @@ module Skeptic
       end
 
       def analyze(limit = nil, code)
-        LinesPerMethod.new(limit).apply_to nil, Ripper.sexp(code)
+        apply_rule LinesPerMethod, limit, code
       end
     end
   end

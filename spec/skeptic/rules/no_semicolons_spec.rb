@@ -42,7 +42,7 @@ module Skeptic
       end
 
       def analyze(code)
-        NoSemicolons.new(true).apply_to Ripper.lex(code), nil
+        apply_rule NoSemicolons, true, code
       end
     end
   end

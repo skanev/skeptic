@@ -25,7 +25,7 @@ module Skeptic
 
       rules.reject { |rule_type, option| option.nil? }.each do |rule_type, option|
         rule = rule_type.new(option)
-        rule.apply_to @tokens, @sexp
+        rule.apply_to @code, @tokens, @sexp
 
         rule.violations.each do |violation|
           @criticism << [violation, rule.name]

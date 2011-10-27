@@ -8,5 +8,6 @@ require 'skeptic/rules/max_nesting_depth'
 require 'skeptic/rules/methods_per_class'
 require 'skeptic/rules/lines_per_method'
 require 'skeptic/rules/no_semicolons'
+require 'skeptic/rules/line_length'
 
 require 'skeptic/critic'
