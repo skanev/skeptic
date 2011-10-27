@@ -87,3 +87,15 @@ Feature: Running skeptic
       Line length (10)
       * Line 2 is too long: 11 columns
       """
+
+  Scenario: Checking the syntax
+    Given a file named "input.rb" with:
+      """
+      unexpected end
+      """
+    When I run `skeptic --check-syntax input.rb`
+    Then it should fail with:
+      """
+      Syntax check
+      * Invalid syntax:
+      """
