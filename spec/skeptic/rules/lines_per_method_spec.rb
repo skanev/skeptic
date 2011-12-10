@@ -36,6 +36,20 @@ module Skeptic
             end
           RUBY
         end
+
+        it "can count the size of module's method" do 
+          code = <<-RUBY
+            module Bar
+              def foo
+                first 
+                second
+              end
+            end
+          RUBY
+
+          analyze(code).size_of('Bar#foo').should eq 2
+        end
+
       end
 
       describe "reporting" do
