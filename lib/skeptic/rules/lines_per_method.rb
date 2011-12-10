@@ -40,6 +40,14 @@ module Skeptic
         end
       end
 
+      on :module do |name,  body|
+        class_name = [env[:class], extract_name(name)].compact.join('::')
+
+        env.scoped :class => class_name do
+          visit body
+        end
+      end
+
       on :def do |name, params, body|
         method_name = extract_name(name)
 
