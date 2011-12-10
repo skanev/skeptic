@@ -40,14 +40,13 @@ module Skeptic
         end
       end
 
-      on :module do |name, parent, body|
+      on :module do |name, body|
         module_name = [env[:module], extract_name(name)].compact.join('::')
 
         env.scoped :module => module_name do
-          visit parent
+          visit body
         end
       end
-
 
       on :def do |name, params, body|
         method_name = extract_name(name)
