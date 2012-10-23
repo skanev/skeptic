@@ -88,6 +88,19 @@ Feature: Running skeptic
       * Line 2 is too long: 11 columns
       """
 
+  Scenario: Disallowing trailing whitespace
+    Given a file named "input.rb" with:
+      """
+      no trailing whitespace
+      trailing whitespace 
+      """
+    When I run `skeptic --no-trailing-whitespace input.rb`
+    Then it should fail with:
+      """
+      Trailing whitespace
+      * Line 2 has trailing whitespace
+      """
+
   Scenario: Checking the syntax
     Given a file named "input.rb" with:
       """

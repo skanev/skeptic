@@ -49,6 +49,15 @@ module Skeptic
       expect_criticism 'Foo#bar is 3 lines long', 'Number of lines per method (1)'
     end
 
+    it "can locate trailing whitespace" do
+      criticize <<-RUBY, no_trailing_whitespace: true
+        no trailing whitespace
+        trailing whitespace 
+      RUBY
+
+      expect_criticism 'Line 2 has trailing whitespace', 'Trailing whitespace'
+    end
+
     def criticize(code, options)
       @critic = Critic.new options
       @critic.criticize code
