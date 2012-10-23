@@ -13,5 +13,5 @@ group :development do
   gem "aruba"
   gem "bundler"
   gem "jeweler"
-  gem "rcov"
+  gem "simplecov"
 end
