@@ -34,6 +34,25 @@ module Skeptic
           analyze(code).size_of('Bar#foo').should eq 2
         end
 
+        it "can count the size of a class method" do
+          code = <<-RUBY
+            class Foo
+              def self.bar
+                first
+                second
+              end
+
+              def Foo.baz
+                first
+                second
+              end
+            end
+          RUBY
+
+          analyze(code).size_of('Foo.bar').should eq 2
+          analyze(code).size_of('Foo.baz').should eq 2
+        end
+
         it "works with nested classes" do
           code = <<-RUBY
             module Parent

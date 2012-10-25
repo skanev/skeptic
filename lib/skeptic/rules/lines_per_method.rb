@@ -61,6 +61,21 @@ module Skeptic
         end
       end
 
+      on :defs do |target, separator, name, params, body|
+        method_name = extract_name(name)
+        class_name  = extract_name(target)
+        class_name  = env[:module] if class_name == 'self'
+
+        env.scoped method: method_name, line_numbers: [] do
+          visit body
+
+          lines = env[:line_numbers].uniq.compact.length
+
+          full_name = "#{class_name}.#{method_name}"
+          @line_counts[full_name] = lines + @line_counts.fetch(full_name, 0)
+        end
+      end
+
       on :@ident, :@const, :@gvar, :@ivar, :@cvar, :@int, :@float, :@tstring_content, :@kw do |text, location|
         env[:line_numbers] << location.first
       end
