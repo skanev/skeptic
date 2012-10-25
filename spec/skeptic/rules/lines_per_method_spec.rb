@@ -34,6 +34,19 @@ module Skeptic
           analyze(code).size_of('Bar#foo').should eq 2
         end
 
+        it "properly registers operators" do
+          code = <<-RUBY
+            class Foo
+              def <=>(other)
+                first
+                second
+              end
+            end
+          RUBY
+
+          analyze(code).size_of('Foo#<=>').should eq 2
+        end
+
         it "does not count empty lines" do
           expect_line_count 2, <<-RUBY
             foo
