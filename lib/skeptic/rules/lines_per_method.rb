@@ -33,17 +33,17 @@ module Skeptic
       private
 
       on :class do |name, parent, body|
-        class_name = [env[:class], extract_name(name)].compact.join('::')
+        class_name = [env[:module], extract_name(name)].compact.join('::')
 
         env.scoped :class => class_name do
           visit body
         end
       end
 
-      on :module do |name,  body|
-        class_name = [env[:class], extract_name(name)].compact.join('::')
+      on :module do |name, body|
+        module_name = [env[:module], extract_name(name)].compact.join('::')
 
-        env.scoped :class => class_name do
+        env.scoped :class => module_name do
           visit body
         end
       end
