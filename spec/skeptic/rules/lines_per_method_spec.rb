@@ -34,6 +34,21 @@ module Skeptic
           analyze(code).size_of('Bar#foo').should eq 2
         end
 
+        it "works with nested classes" do
+          code = <<-RUBY
+            module Parent
+              class Child
+                def method
+                  first
+                  second
+                end
+              end
+            end
+          RUBY
+
+          analyze(code).size_of('Parent::Child#method').should eq 2
+        end
+
         it "properly registers operators" do
           code = <<-RUBY
             class Foo
