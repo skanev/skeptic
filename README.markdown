@@ -1,4 +1,4 @@
-= skeptic
+# skeptic
 
 _Skeptic_ is a *very* experimental static code analyzer for Ruby 1.9. It points out annoying things in your Ruby code.
 
@@ -6,7 +6,7 @@ I am using it for a [Ruby course in the University of Sofia](http://fmi.ruby.bg/
 
 You should probably not use it for anythin.
 
-== Rules
+## Rules
 
 Skeptic checks if the code complies to a number of rules and reports the violations. Here is a list of the rules:
 
@@ -17,6 +17,6 @@ Skeptic checks if the code complies to a number of rules and reports the violati
 * **No semicolons** - stops you from using semicolons as expression delimiters.
 * **No trailing whitespace** - points out if your lines end on whitespace.
 
-== Copyright
+## Copyright
 
 Copyright (c) 2011 Stefan Kanev. See LICENSE.txt for further details.
