@@ -8,7 +8,7 @@ module Skeptic
       end
 
       describe "calculating method size" do
-        it "can count the size of a method in a class" do
+        it "works with methods defined by a class" do
           code = <<-RUBY
             class Foo
               def bar
@@ -21,7 +21,7 @@ module Skeptic
           analyze(code).size_of('Foo#bar').should eq 2
         end
 
-        it "can count the size of a method in a module" do
+        it "works with methods defined by a module" do
           code = <<-RUBY
             module Bar
               def foo
@@ -34,7 +34,7 @@ module Skeptic
           analyze(code).size_of('Bar#foo').should eq 2
         end
 
-        it "can count the size of a class method" do
+        it "works with singleton methods (on a module or a class)" do
           code = <<-RUBY
             class Foo
               def self.bar
@@ -68,7 +68,7 @@ module Skeptic
           analyze(code).size_of('Parent::Child#method').should eq 2
         end
 
-        it "properly registers operators" do
+        it "works with operators" do
           code = <<-RUBY
             class Foo
               def <=>(other)
