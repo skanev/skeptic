@@ -25,7 +25,7 @@ module Skeptic
           type, *args = *sexp
           handler = self.class.handlers[type]
 
-          with_sexp_type(type) { instance_exec *args, &handler }
+          with_sexp_type(type) { instance_exec(*args, &handler) }
         else
           range = sexp[0].kind_of?(Symbol) ? 1..-1 : 0..-1
 
