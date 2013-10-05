@@ -10,6 +10,7 @@ module Skeptic
     table.register MaxNestingDepth, :int
     table.register MethodsPerClass, :int
     table.register NoSemicolons, :boolean
+    table.register SpaceAroundOperators, :boolean
     table.register NoTrailingWhitespace, :boolean
   end
 end
