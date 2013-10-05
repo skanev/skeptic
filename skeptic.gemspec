@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "skeptic"
-  s.version = "0.0.2"
+  s.version = "0.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Stefan Kanev"]
-  s.date = "2012-10-23"
+  s.date = "2012-10-25"
   s.description = "An experimental, half-assed, bug-ridden and highly opinionated code analyzer."
   s.email = "stefan.kanev@gmail.com"
   s.executables = ["skeptic"]
@@ -41,7 +41,8 @@ Gem::Specification.new do |s|
     "lib/skeptic/rules/no_semicolons.rb",
     "lib/skeptic/rules/no_trailing_whitespace.rb",
     "lib/skeptic/scope.rb",
-    "lib/skeptic/sexp_visitor.rb"
+    "lib/skeptic/sexp_visitor.rb",
+    "skeptic.gemspec"
   ]
   s.homepage = "http://github.com/skanev/skeptic"
   s.licenses = ["MIT"]

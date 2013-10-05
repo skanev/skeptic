@@ -33,9 +33,17 @@ module Skeptic
       private
 
       on :class do |name, parent, body|
-        class_name = [env[:class], extract_name(name)].compact.join('::')
+        class_name = [env[:module], extract_name(name)].compact.join('::')
 
-        env.scoped :class => class_name do
+        env.scoped :module => class_name do
+          visit body
+        end
+      end
+
+      on :module do |name, body|
+        module_name = [env[:module], extract_name(name)].compact.join('::')
+
+        env.scoped :module => module_name do
           visit body
         end
       end
@@ -48,7 +56,22 @@ module Skeptic
 
           lines = env[:line_numbers].uniq.compact.length
 
-          full_name = "#{env[:class]}##{env[:method]}"
+          full_name = "#{env[:module]}##{env[:method]}"
+          @line_counts[full_name] = lines + @line_counts.fetch(full_name, 0)
+        end
+      end
+
+      on :defs do |target, separator, name, params, body|
+        method_name = extract_name(name)
+        class_name  = extract_name(target)
+        class_name  = env[:module] if class_name == 'self'
+
+        env.scoped method: method_name, line_numbers: [] do
+          visit body
+
+          lines = env[:line_numbers].uniq.compact.length
+
+          full_name = "#{class_name}.#{method_name}"
           @line_counts[full_name] = lines + @line_counts.fetch(full_name, 0)
         end
       end

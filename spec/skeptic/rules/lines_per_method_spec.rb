@@ -8,7 +8,7 @@ module Skeptic
       end
 
       describe "calculating method size" do
-        it "can count the size of a method" do
+        it "works with methods defined by a class" do
           code = <<-RUBY
             class Foo
               def bar
@@ -19,6 +19,66 @@ module Skeptic
           RUBY
 
           analyze(code).size_of('Foo#bar').should eq 2
+        end
+
+        it "works with methods defined by a module" do
+          code = <<-RUBY
+            module Bar
+              def foo
+                first
+                second
+              end
+            end
+          RUBY
+
+          analyze(code).size_of('Bar#foo').should eq 2
+        end
+
+        it "works with singleton methods (on a module or a class)" do
+          code = <<-RUBY
+            class Foo
+              def self.bar
+                first
+                second
+              end
+
+              def Foo.baz
+                first
+                second
+              end
+            end
+          RUBY
+
+          analyze(code).size_of('Foo.bar').should eq 2
+          analyze(code).size_of('Foo.baz').should eq 2
+        end
+
+        it "works with nested classes" do
+          code = <<-RUBY
+            module Parent
+              class Child
+                def method
+                  first
+                  second
+                end
+              end
+            end
+          RUBY
+
+          analyze(code).size_of('Parent::Child#method').should eq 2
+        end
+
+        it "works with operators" do
+          code = <<-RUBY
+            class Foo
+              def <=>(other)
+                first
+                second
+              end
+            end
+          RUBY
+
+          analyze(code).size_of('Foo#<=>').should eq 2
         end
 
         it "does not count empty lines" do
@@ -36,6 +96,7 @@ module Skeptic
             end
           RUBY
         end
+
       end
 
       describe "reporting" do
