@@ -6,8 +6,7 @@ module Skeptic
       include SexpVisitor
 
       def initialize(e: nil)
-        @operators = []
-        env[:operators] = []
+        @operators_without_space_around_them = []
       end
 
       def apply_to(code, tokens, sexp)
@@ -16,10 +15,10 @@ module Skeptic
         tokens.each_cons(3) do |left, middle, right|
           if middle[1] == :on_op and middle.last != '**' #cuz batsov says so
             if no_space_around_operator? middle, left
-              @operators <<
+              @operators_without_space_around_them <<
                 [:left, middle.first, middle.last, lines[middle.first[0] - 1]]
             elsif no_space_around_operator? middle, right
-              @operators <<
+              @operators_without_space_around_them <<
                 [:right, middle.first, middle.last, lines[middle.first[0] - 1]]
             end
           end
@@ -28,7 +27,8 @@ module Skeptic
       end
 
       def violations
-        @operators.map do |dir, location, value, snippet|
+        @operators_without_space_around_them
+        .map do |dir, location, value, snippet|
           "no space in #{dir} of #{value} on " +
           "#{location.first} " +
           "#{snippet.lstrip}"
