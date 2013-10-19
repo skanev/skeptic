@@ -5,7 +5,7 @@ module Skeptic
   module Rules
     describe SpaceAroundOperators do
       it_behaves_like 'Rule' do
-        subject { SpaceAroundOperators.new }
+        subject { SpaceAroundOperators.new(nil) }
       end
 
       describe "detecting operators without space around them" do
@@ -17,7 +17,7 @@ module Skeptic
           RUBY
 
           rule.should have(1).violations
-          rule.violations.should include 'no space in left of + on 2 \'x\'+\'z\''
+          rule.violations.should include 'no space in left of + on line 2: \'x\'+\'z\''
         end
 
         it "checks for space left of an operator" do
@@ -26,7 +26,7 @@ module Skeptic
           RUBY
 
           rule.should have(1).violations
-          rule.violations.should include 'no space in left of + on 1 2+ d'
+          rule.violations.should include 'no space in left of + on line 1: 2+ d'
         end
 
         it "checks for space right of an operator" do
@@ -35,7 +35,7 @@ module Skeptic
           RUBY
 
           rule.should have(1).violations
-          rule.violations.should include 'no space in right of + on 1 f +g'
+          rule.violations.should include 'no space in right of + on line 1: f +g'
         end
 
         it "checks for valid operators with space around em" do
@@ -77,12 +77,12 @@ module Skeptic
 
       describe "reporting" do
         it "reports under the name 'Space around operators'" do
-          SpaceAroundOperators.new.name.should eq 'Space around operators'
+          SpaceAroundOperators.new(nil).name.should eq 'Space around operators'
         end
       end
 
       def analyze(code)
-        apply_rule SpaceAroundOperators, code
+        apply_rule SpaceAroundOperators, nil, code
       end
     end
   end
