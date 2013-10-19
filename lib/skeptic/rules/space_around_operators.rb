@@ -3,7 +3,7 @@ module Skeptic
     class SpaceAroundOperators
       DESCRIPTION = 'Space around operators'
 
-      def initialize(e: nil)
+      def initialize(data)
         @operators_without_space_around_them = []
       end
 
@@ -26,8 +26,8 @@ module Skeptic
       def violations
         @operators_without_space_around_them
         .map do |dir, location, value, snippet|
-          "no space in #{dir} of #{value} on " +
-          "#{location.first} " +
+          "no space in #{dir} of #{value} on line " +
+          "#{location.first}: " +
           "#{snippet.lstrip}"
         end
       end
