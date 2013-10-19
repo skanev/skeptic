@@ -11,6 +11,6 @@ module Skeptic
     table.register MethodsPerClass, :int
     table.register NoSemicolons, :boolean
     table.register NoTrailingWhitespace, :boolean
-    table.register SpaceAroundOperators, :boolean
+    table.register SpacesAroundOperators, :boolean
   end
 end
