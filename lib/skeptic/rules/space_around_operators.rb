@@ -3,8 +3,6 @@ module Skeptic
     class SpaceAroundOperators
       DESCRIPTION = 'Space around operators'
 
-      include SexpVisitor
-
       def initialize(e: nil)
         @operators_without_space_around_them = []
       end
@@ -13,13 +11,12 @@ module Skeptic
         lines = code.split("\n")
 
         tokens.each_cons(3) do |left, middle, right|
-          if middle[1] == :on_op and middle.last != '**' #cuz batsov says so
+          if middle[1] == :on_op and middle.last != '**' #cuz the guide says so
+            violation_data = [middle.first, middle.last, lines[middle.first[0] - 1]]
             if no_space_around_operator? middle, left
-              @operators_without_space_around_them <<
-                [:left, middle.first, middle.last, lines[middle.first[0] - 1]]
+              @operators_without_space_around_them << [:left] + violation_data
             elsif no_space_around_operator? middle, right
-              @operators_without_space_around_them <<
-                [:right, middle.first, middle.last, lines[middle.first[0] - 1]]
+              @operators_without_space_around_them << [:right] + violation_data
             end
           end
         end
