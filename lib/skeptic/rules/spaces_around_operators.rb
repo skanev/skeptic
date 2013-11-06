@@ -10,12 +10,14 @@ module Skeptic
       end
 
       def apply_to(code, tokens, sexp)
-        tokens.each_cons(3).select { |_, op, _| operator? op }.each do |left, operator, right|
-          if no_spaces_around_operator? operator, left or
-             no_spaces_around_operator? operator, right
-            @violations << [operator.last, operator.first[0]]
-          end
-        end
+        @violations = tokens.each_cons(3).select do |_, token, _|
+           operator_expecting_spaces? token
+         end.select do |left, operator, right|
+           no_spaces_around?(operator, from: left) or
+           no_spaces_around?(operator, from: right)
+         end.map do |_, operator, _|
+           [operator.last, operator.first[0]]
+         end
         self
       end
 
@@ -31,13 +33,13 @@ module Skeptic
 
       private
 
-      def operator?(token)
+      def operator_expecting_spaces?(token)
         token[1] == :on_op and
           not OPERATORS_WITHOUT_SPACES_AROUND_THEM.include? token.last
       end
 
-      def no_spaces_around_operator?(operator, neighbour)
-        neighbour.first[0] == operator.first[0] and neighbour[1] != :on_sp
+      def no_spaces_around?(operator, from:)
+        from.first[0] == operator.first[0] and from[1] != :on_sp
       end
     end
   end
