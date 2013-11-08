@@ -60,28 +60,36 @@ module Skeptic
       private
 
       on :class, :module, :def do |name, *args, body|
-        extracted_name = extract_name(name).match(/\A([^!?]+)[!?]?\z/).captures[0]
-        if bad_name_of?(sexp_type, extracted_name)
+        extracted_name = strip_bangs_and_question_marks(extract_name(name))
+        if bad_name_of? sexp_type, extracted_name
           @violations << [sexp_type, extracted_name, extract_line_number(name)]
         end
 
-        visit(body)
+        visit body
       end
 
       on :symbol do |type, text, location|
-        if bad_name_of?(:symbol, text)
+        if bad_name_of? :symbol, text
           @violations << [:symbol, text, location.first]
         end
       end
 
       on :@ident, :@ivar, :@cvar do |text, location|
-        if bad_name_of?(:@ident, text.match(/\A@*(.+)\z/).captures[0])
+        if bad_name_of? :@ident, strip_at_signs(text)
           @violations << [sexp_type, text, location.first]
         end
       end
 
       def bad_name_of?(type, name)
         !CONVENTION_REGEXES[EXPECTED_CONVENTIONS[type]].match(name)
+      end
+
+      def strip_bangs_and_question_marks(name)
+        name.match(/\A([^!?]+)[!?]?\z/).captures[0]
+      end
+
+      def strip_at_signs(name)
+        name.match(/\A@*(.+)\z/).captures[0]
       end
     end
   end
