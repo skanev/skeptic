@@ -62,12 +62,12 @@ module Skeptic
         end
       end
 
-      def extract_line(tree)
+      def extract_line_number(tree)
         type, first, second = *tree
         case type
-          when :const_path_ref then extract_line(first)
-          when :const_ref then extract_line(first)
-          when :var_ref then extract_line(first)
+          when :const_path_ref then extract_line_number(first)
+          when :const_ref then extract_line_number(first)
+          when :var_ref then extract_line_number(first)
           when :@const, :@op, :@ident then second.first
           else 0
         end

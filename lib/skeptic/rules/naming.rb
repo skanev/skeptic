@@ -61,7 +61,7 @@ module Skeptic
       on :class, :module, :def do |name, *args, body|
         extracted_name = extract_name(name)
         if bad_name_of?(sexp_type, extracted_name)
-          @violations << [sexp_type, extracted_name, extract_line(name)]
+          @violations << [sexp_type, extracted_name, extract_line_number(name)]
         end
 
         visit(body)
