@@ -141,11 +141,13 @@ module Skeptic
           analyzer.violations[0].should include 'on line 2'
         end
 
-        it 'can tell what writing practice is expected for a type of name' do
-          analyzer = analyze('fL = @iVar')
+        it 'can report different kind of naming mistakes' do
+          analyzer = analyze('fL = [@iVar, :sWd, @@lE]')
 
-          analyzer.violations[0].should include 'snake_case'
-          analyzer.violations[1].should include 'snake_case'
+          analyzer.violations[0].should include 'local variable'
+          analyzer.violations[1].should include 'instance variable'
+          analyzer.violations[2].should include 'symbol'
+          analyzer.violations[3].should include 'class variable'
         end
       end
 

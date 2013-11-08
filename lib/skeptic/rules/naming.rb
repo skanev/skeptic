@@ -18,7 +18,7 @@ module Skeptic
       PRACTICE_NAMES = {
         camel_case:            'CamelCase',
         snake_case:            'snake_case',
-        screaming_snake_case:  'SCREAMING_SNAKE_CASE'
+        screaming_snake_case:  'SCREAMING_SNAKE_CASE',
       }
 
       PRACTICE_REGEXES = {
@@ -27,7 +27,15 @@ module Skeptic
         screaming_snake_case:  /\A[A-Z][A-Z_0-9]*\z/
       }
 
-      NAME_TYPES = {class: :class, module: :module, symbol: :symbol, def: :method}
+      NAME_TYPES = {
+        class:          'class',
+        module:         'module',
+        symbol:         'symbol',
+        def:            'method',
+        :@ident      => 'local variable',
+        :@ivar       => 'instance variable',
+        :@cvar       => 'class variable'
+      }
 
       def initialize(data)
         @violations = []
