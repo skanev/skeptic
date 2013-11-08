@@ -2,9 +2,9 @@ require 'spec_helper'
 
 module Skeptic
   module Rules
-    describe Naming do
+    describe NamingConventions do
       it_behaves_like 'Rule' do
-        subject { Naming.new(true) }
+        subject { NamingConventions.new(true) }
       end
 
       describe 'detecting bad names' do
@@ -78,7 +78,7 @@ module Skeptic
           expect_bad_names_of(:@cvar, code, 1)
         end
 
-        it 'doesn\'t give false positives' do
+        it "doesn't give false positives" do
           code = <<-RUBY
             class CcC
               def d_d
@@ -159,7 +159,7 @@ module Skeptic
       end
 
       def analyze(code)
-        apply_rule(Naming, true, code)
+        apply_rule(NamingConventions, true, code)
       end
     end
   end

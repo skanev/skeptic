@@ -1,11 +1,11 @@
 module Skeptic
   module Rules
-    class Naming
+    class NamingConventions
       DESCRIPTION = 'Check if the names of variables/methods/classes follow the convention'
 
       include SexpVisitor
 
-      EXPECTED_PRACTICE = {
+      EXPECTED_CONVENTIONS = {
         class:     :camel_case,
         module:    :camel_case,
         def:       :snake_case,
@@ -15,13 +15,13 @@ module Skeptic
         :@cvar  => :snake_case
       }
 
-      PRACTICE_NAMES = {
+      CONVENTION_EXAMPLES = {
         camel_case:            'CamelCase',
         snake_case:            'snake_case',
         screaming_snake_case:  'SCREAMING_SNAKE_CASE',
       }
 
-      PRACTICE_REGEXES = {
+      CONVENTION_REGEXES = {
         snake_case:            /\A[a-z_][a-z_0-9]*\z/,
         camel_case:            /\A[A-Z][a-zA-Z0-9]*\z/,
         screaming_snake_case:  /\A[A-Z][A-Z_0-9]*\z/
@@ -49,7 +49,7 @@ module Skeptic
       def violations
         @violations.map do |type, name, line_number|
           "#{NODE_NAMES[type]} named #{name} on line #{line_number}" +
-          " is not #{PRACTICE_NAMES[EXPECTED_PRACTICE[type]]}"
+          " is not #{CONVENTION_EXAMPLES[EXPECTED_CONVENTIONS[type]]}"
         end
       end
 
@@ -81,7 +81,7 @@ module Skeptic
       end
 
       def bad_name_of?(type, name)
-        !PRACTICE_REGEXES[EXPECTED_PRACTICE[type]].match(name)
+        !CONVENTION_REGEXES[EXPECTED_CONVENTIONS[type]].match(name)
       end
     end
   end
