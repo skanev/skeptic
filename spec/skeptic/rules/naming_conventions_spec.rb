@@ -81,7 +81,11 @@ module Skeptic
         it "doesn't give false positives" do
           code = <<-RUBY
             class CcC
-              def d_d
+              def d_d?
+                2
+              end
+
+              def s!
                 2
               end
 

@@ -60,7 +60,7 @@ module Skeptic
       private
 
       on :class, :module, :def do |name, *args, body|
-        extracted_name = extract_name(name)
+        extracted_name = extract_name(name).match(/\A([^!?]+)[!?]?\z/).captures[0]
         if bad_name_of?(sexp_type, extracted_name)
           @violations << [sexp_type, extracted_name, extract_line_number(name)]
         end
