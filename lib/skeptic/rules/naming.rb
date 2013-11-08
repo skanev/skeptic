@@ -54,7 +54,7 @@ module Skeptic
       end
 
       def name
-        'Naming of variables, symbols and constants'
+        'Detect bad naming'
       end
 
       private
