@@ -152,10 +152,10 @@ module Skeptic
       end
 
       def expect_bad_names_of(type, code, count)
-        analyze(code)
-          .instance_variable_get("@violations").map(&:first)
-          .select { |violation_type| type == violation_type }
-          .count.should eq count
+        analyze(code).
+          instance_variable_get("@violations").map(&:first).
+          select { |violation_type| type == violation_type }.
+          count.should eq count
       end
 
       def analyze(code)
