@@ -27,7 +27,7 @@ module Skeptic
         screaming_snake_case:  /\A[A-Z][A-Z_0-9]*\z/
       }
 
-      NAME_TYPES = {
+      NODE_NAMES = {
         class:          'class',
         module:         'module',
         symbol:         'symbol',
@@ -48,7 +48,7 @@ module Skeptic
 
       def violations
         @violations.map do |type, name, line_number|
-          "#{NAME_TYPES[type]} named #{name} on line #{line_number} is not #{PRACTICE_NAMES[EXPECTED_PRACTICE[type]]}"
+          "#{NODE_NAMES[type]} named #{name} on line #{line_number} is not #{PRACTICE_NAMES[EXPECTED_PRACTICE[type]]}"
         end
       end
 
