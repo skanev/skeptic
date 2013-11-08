@@ -48,7 +48,8 @@ module Skeptic
 
       def violations
         @violations.map do |type, name, line_number|
-          "#{NODE_NAMES[type]} named #{name} on line #{line_number} is not #{PRACTICE_NAMES[EXPECTED_PRACTICE[type]]}"
+          "#{NODE_NAMES[type]} named #{name} on line #{line_number}" +
+          " is not #{PRACTICE_NAMES[EXPECTED_PRACTICE[type]]}"
         end
       end
 
