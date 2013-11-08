@@ -78,6 +78,14 @@ module Skeptic
           expect_bad_names_of(:@cvar, code, 1)
         end
 
+        it 'can find bad const names' do
+          expect_bad_names_of(:@const, "KL = 2", 0)
+        end
+
+        it 'can make a difference between class and const' do
+          expect_bad_names_of(:@const, "class A;end", 0)
+        end
+
         it "doesn't give false positives" do
           code = <<-RUBY
             class CcC

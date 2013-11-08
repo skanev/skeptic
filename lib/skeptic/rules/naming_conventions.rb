@@ -12,7 +12,8 @@ module Skeptic
         symbol:    :snake_case,
         :@ident => :snake_case,
         :@ivar  => :snake_case,
-        :@cvar  => :snake_case
+        :@cvar  => :snake_case,
+        :@const => :screaming_snake_case
       }
 
       CONVENTION_EXAMPLES = {
@@ -34,7 +35,8 @@ module Skeptic
         def:            'method',
         :@ident      => 'local variable',
         :@ivar       => 'instance variable',
-        :@cvar       => 'class variable'
+        :@cvar       => 'class variable',
+        :@const      => 'constant'
       }
 
       def initialize(data)
@@ -74,8 +76,8 @@ module Skeptic
         end
       end
 
-      on :@ident, :@ivar, :@cvar do |text, location|
-        if bad_name_of? :@ident, strip_at_signs(text)
+      on :@ident, :@ivar, :@cvar, :@const do |text, location|
+        if bad_name_of? sexp_type, strip_at_signs(text)
           @violations << [sexp_type, text, location.first]
         end
       end
