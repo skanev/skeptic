@@ -52,7 +52,7 @@ module Skeptic
 
       on :class, :module, :def do |name, *args, body|
         extracted_name = extract_name(name)
-        unless styled?(sexp_type, extracted_name)
+        if bad_name_of?(sexp_type, extracted_name)
           @violations << [sexp_type, extracted_name, extract_line(name)]
         end
 
@@ -60,19 +60,19 @@ module Skeptic
       end
 
       on :symbol do |type, text, location|
-        unless styled?(:symbol, text)
+        if bad_name_of?(:symbol, text)
           @violations << [:symbol, text, location.first]
         end
       end
 
       on :@ident, :@ivar, :@cvar do |text, location|
-        unless styled?(:@ident, text.match(/\A@*(.+)\z/).captures[0])
+        if bad_name_of?(:@ident, text.match(/\A@*(.+)\z/).captures[0])
           @violations << [sexp_type, text, location.first]
         end
       end
 
-      def styled?(type, name)
-        !!PRACTICE_REGEXES[EXPECTED_PRACTICE[type]].match(name)
+      def bad_name_of?(type, name)
+        !PRACTICE_REGEXES[EXPECTED_PRACTICE[type]].match(name)
       end
     end
   end
