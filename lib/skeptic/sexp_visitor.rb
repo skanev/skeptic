@@ -56,10 +56,22 @@ module Skeptic
           when :const_ref then extract_name(first)
           when :var_ref then extract_name(first)
           when :@const then first
+          when :@op then first
           when :@ident then first
           when :@kw then first
           when :@op then first
           else '<unknown>'
+        end
+      end
+
+      def extract_line_number(tree)
+        type, first, second = *tree
+        case type
+          when :const_path_ref then extract_line_number(first)
+          when :const_ref then extract_line_number(first)
+          when :var_ref then extract_line_number(first)
+          when :@const, :@op, :@ident then second.first
+          else 0
         end
       end
     end
