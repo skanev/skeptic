@@ -36,11 +36,24 @@ module Skeptic
 
       private
 
-      on :def, :defs do |name, params, body|
+      on :def do |name, params, body|
         method_name = extract_name(name)
         class_name  = env[:class]
 
         @methods[class_name] << method_name
+
+        visit params
+        visit body
+      end
+
+      on :defs do |target, _, name, params, body|
+        target_name = extract_name(target)
+        method_name = extract_name(name)
+        class_name  = env[:class]
+
+        if [class_name, "self"].include? target_name
+          @methods[class_name] << method_name
+        end
 
         visit params
         visit body
@@ -58,12 +71,6 @@ module Skeptic
       on :module do |name, body|
         env.push :class => qualified_class_name(name)
 
-        visit body
-
-        env.pop
-      end
-
-      on :sclass do |ref, body|
         visit body
 
         env.pop
