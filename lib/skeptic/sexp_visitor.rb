@@ -58,6 +58,7 @@ module Skeptic
           when :@const then first
           when :@op then first
           when :@ident then first
+          when :vcall then extract_name(first)
           else '<unknown>'
         end
       end
@@ -68,6 +69,7 @@ module Skeptic
           when :const_path_ref then extract_line_number(first)
           when :const_ref then extract_line_number(first)
           when :var_ref then extract_line_number(first)
+          when :vcall then extract_line_number(first)
           when :@const, :@op, :@ident then second.first
           else 0
         end

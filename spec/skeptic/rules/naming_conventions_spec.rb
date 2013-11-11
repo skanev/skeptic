@@ -86,6 +86,14 @@ module Skeptic
           expect_bad_names_of(:@const, "class A;end", 0)
         end
 
+        it 'can find bad names in function definitions' do
+          expect_bad_names_of(:@ident, "def a(eW, fF = 2, *gK, &bN);end", 4)
+        end
+
+        it 'can find bad names in singleton method definitions' do
+          expect_bad_names_of(:defs, "def s.lF;end", 1)
+        end
+
         it "doesn't give false positives" do
           code = <<-RUBY
             class CcC

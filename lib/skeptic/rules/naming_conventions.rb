@@ -9,6 +9,7 @@ module Skeptic
         class:     :camel_case,
         module:    :camel_case,
         def:       :snake_case,
+        defs:      :snake_case,
         symbol:    :snake_case,
         :@ident => :snake_case,
         :@ivar  => :snake_case,
@@ -33,6 +34,7 @@ module Skeptic
         module:         'module',
         symbol:         'symbol',
         def:            'method',
+        defs:           'method',
         :@ident      => 'local variable',
         :@ivar       => 'instance variable',
         :@cvar       => 'class variable',
@@ -63,22 +65,32 @@ module Skeptic
 
       on :class, :module, :def do |name, *args, body|
         extracted_name = strip_name_suffix(extract_name(name))
-        if bad_name? sexp_type, extracted_name
-          @violations << [sexp_type, extracted_name, extract_line_number(name)]
-        end
+        check_name sexp_type, extracted_name, extract_line_number(name)
+        visit args.first if args.first
+        visit body
+      end
 
+      on :defs do |target, _, name, params, body|
+        if [target, name].any? do |ident|
+            bad_name? :defs, strip_name_suffix(extract_name(ident))
+          end
+          @violations << [:defs, "#{target}.#{name}", extract_line_number(name)]
+        end
+        visit params
         visit body
       end
 
       on :symbol do |type, text, location|
-        if bad_name? :symbol, text
-          @violations << [:symbol, text, location.first]
-        end
+        check_name :symbol, text, location.first
       end
 
       on :@ident, :@ivar, :@cvar, :@const do |text, location|
-        if bad_name? sexp_type, strip_name_prefix(text)
-          @violations << [sexp_type, text, location.first]
+        check_name sexp_type, strip_name_prefix(text), location.first
+      end
+
+      def check_name(type, name, line)
+        if bad_name? type, name
+          @violations << [type, name, line]
         end
       end
 
