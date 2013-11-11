@@ -5,6 +5,7 @@ module Skeptic
     end
 
     table.register CheckSyntax, :boolean
+    table.register EnglishWordsForNames, :string
     table.register LineLength, :int
     table.register LinesPerMethod, :int
     table.register MaxNestingDepth, :int

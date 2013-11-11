@@ -11,6 +11,7 @@ require 'skeptic/rules/lines_per_method'
 require 'skeptic/rules/no_semicolons'
 require 'skeptic/rules/line_length'
 require 'skeptic/rules/no_trailing_whitespace'
+require 'skeptic/rules/english_words_for_names'
 
 require 'skeptic/rule_table'
 require 'skeptic/rules'
