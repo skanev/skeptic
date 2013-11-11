@@ -14,12 +14,6 @@ group :development do
   gem "bundler"
   gem "jeweler"
   gem "simplecov"
-  # english-words-names
-  # gem "whatlanguage"
-  # gem "i18n"
-  # gem "linguistics"
-  # gem "activesupport-inflector"
-  # or the easy for skeptic, hard for users
   gem "ffi-aspell"
 end
 
