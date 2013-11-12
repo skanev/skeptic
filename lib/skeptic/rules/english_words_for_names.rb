@@ -31,22 +31,15 @@ module Skeptic
       private
 
       on :class, :module do |name, *args, body|
-        check_identifier name
+        check_ident name
         visit body
       end
 
-      on :def do |name, params, body|
-        check_identifier name
+      on :def, :defs do |*args, name, params, body|
+        check_ident name
         visit params
         visit body
       end
-
-      on :defs do |module_name, _, name, params, body|
-        check_identifier name
-        visit params
-        visit body
-      end
-
 
       on :lambda do |params, body|
         visit params if params
@@ -58,26 +51,24 @@ module Skeptic
         visit body
       end
 
-      on :params do |params, default_params , rest_params, *args, block_param|
-        unary_params = params.to_a.map do |param|
-          param.first == :@ident ? [param] : param.last.map(&:last)
-        end.reduce([], :+)
+      on :params do |unary_params, default_params , rest_params, *args, block_param|
+        unary_param_idents = extract_unary_param_idents unary_params
 
-        param_identifiers = unary_params +
-                            default_params.to_a.map(&:first) +
-                            rest_params.to_a[1..-1].to_a +
-                            (block_param ? [block_param] : [])
+        param_idents = unary_param_idents +
+                       default_params.to_a.map(&:first) +
+                       rest_params.to_a[1..-1].to_a +
+                       [block_param].compact
 
-        param_identifiers.each { |param_identifier| check_identifier param_identifier }
+        param_idents.each { |param_ident| check_ident param_ident }
       end
 
       on :assign do |target, value|
-        check_identifier(target)
+        check_ident target
         visit value
       end
 
-      def check_identifier(identifier)
-        check_name(extract_name(identifier), extract_line_number(identifier))
+      def check_ident(ident)
+        check_name(extract_name(ident), extract_line_number(ident))
       end
 
       def check_name(name, line_number)

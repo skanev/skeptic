@@ -76,6 +76,12 @@ module Skeptic
           else 0
         end
       end
+
+      def extract_unary_param_idents(unary_params)
+        unary_params.to_a.map do |param|
+          param.first == :@ident ? [param] : param.last.map(&:last)
+        end.reduce([], :+)
+      end
     end
   end
 end
