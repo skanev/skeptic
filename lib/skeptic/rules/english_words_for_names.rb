@@ -14,7 +14,7 @@ module Skeptic
       end
 
       def apply_to(code, tokens, sexp)
-        visit(sexp)
+        visit sexp
         self
       end
 
@@ -31,18 +31,18 @@ module Skeptic
       private
 
       on :class, :module do |name, *args, body|
-        check_ident name
+        check_identifier name
         visit body
       end
 
       on :def do |name, params, body|
-        check_ident name
+        check_identifier name
         visit params
         visit body
       end
 
       on :defs do |module_name, _, name, params, body|
-        check_ident name
+        check_identifier name
         visit params
         visit body
       end
@@ -59,19 +59,25 @@ module Skeptic
       end
 
       on :params do |params, default_params , rest_params, *args, block_param|
-        param_idents = params.to_a + default_params.to_a.map(&:first) +
-                        rest_params.to_a[1..-1].to_a + (block_param ? [block_param] : [])
+        unary_params = params.to_a.map do |param|
+          param.first == :@ident ? [param] : param.last.map(&:last)
+        end.reduce([], :+)
 
-        param_idents.each { |param_ident| check_ident param_ident }
+        param_identifiers = unary_params +
+                            default_params.to_a.map(&:first) +
+                            rest_params.to_a[1..-1].to_a +
+                            (block_param ? [block_param] : [])
+
+        param_identifiers.each { |param_identifier| check_identifier param_identifier }
       end
 
       on :assign do |target, value|
-        check_ident(target)
+        check_identifier(target)
         visit value
       end
 
-      def check_ident(ident)
-        check_name(extract_name(ident), extract_line_number(ident))
+      def check_identifier(identifier)
+        check_name(extract_name(identifier), extract_line_number(identifier))
       end
 
       def check_name(name, line_number)
@@ -93,7 +99,7 @@ module Skeptic
       end
 
       def strip_word_punctuation(word)
-        word.sub(/\A@{1,2}/, '').sub(/[?!\|\&\=\]\+\-\*\/\%\>\<]+\z/,'')
+        word.gsub(/[^[^[:ascii:]]a-zA-Z0-9_]/, '')
       end
 
       def english_word?(word)

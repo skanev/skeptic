@@ -57,6 +57,7 @@ module Skeptic
           expect_vogon_mumble('object = proc { |varh| varh }')
           expect_classy_english('zombie = -> { 2 }')
           expect_classy_english('zombie = proc { 2 }')
+          expect_classy_english('def function((weird, girl), programmer); 2; end')
         end
 
         it "doesnt't check if outside names are in English" do
