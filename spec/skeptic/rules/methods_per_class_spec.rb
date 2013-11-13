@@ -42,6 +42,52 @@ module Skeptic
           RUBY
         end
 
+        it "counts class methods defined with self.method_name syntax" do
+          expect_method_count 'Foo', 1, <<-RUBY
+            class Foo
+              def self.bar; end
+            end
+          RUBY
+        end
+
+        it "counts class methods defined with ClassName.method_name syntax" do
+          expect_method_count 'Foo', 1, <<-RUBY
+            class Foo
+              def Foo.bar; end
+            end
+          RUBY
+        end
+
+        it "counts class methods defined with ClassName.method_name syntax from other class" do
+          expect_method_count 'Foo', 1, <<-RUBY
+            class Foo
+            end
+
+            class Bar
+              def Foo.baz
+              end
+            end
+          RUBY
+        end
+
+        it "does not count methods defined on other class with ClassName.method_name syntax" do
+          expect_method_count 'Foo', 0, <<-RUBY
+            class Foo
+              def Baz.bar; end
+            end
+          RUBY
+        end
+
+        it "counts class methods defined with class << self syntax" do
+          expect_method_count 'Foo', 1, <<-RUBY
+            class Foo
+              class << self
+                def self.bar; end
+              end
+            end
+          RUBY
+        end
+
         it "works with multiple classes" do
           counter = analyze <<-RUBY
             class Foo; def name; end; end

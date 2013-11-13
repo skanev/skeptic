@@ -46,6 +46,18 @@ module Skeptic
         visit body
       end
 
+      on :defs do |target, _, name, params, body|
+        target_name = extract_name(target)
+        method_name = extract_name(name)
+        class_name  = env[:class]
+
+        target_name = class_name if target_name == "self"
+        @methods[target_name] << method_name
+
+        visit params
+        visit body
+      end
+
       on :class do |name, parents, body|
         env.push :class => qualified_class_name(name)
 
