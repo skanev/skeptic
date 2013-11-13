@@ -1,1 +1,1 @@
-rvm --create 2.1.0@skeptic
+rvm --create 1.9.3@skeptic
