@@ -51,9 +51,8 @@ module Skeptic
         method_name = extract_name(name)
         class_name  = env[:class]
 
-        if [class_name, "self"].include? target_name
-          @methods[class_name] << method_name
-        end
+        target_name = class_name if target_name == "self"
+        @methods[target_name] << method_name
 
         visit params
         visit body
