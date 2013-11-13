@@ -25,7 +25,7 @@ module Skeptic
           type, *args = *sexp
           handler = self.class.handlers[type]
 
-          with_sexp_type(type) { instance_exec(*args, &handler) }
+          with_sexp_type(type) { instance_exec *args, &handler }
         else
           range = sexp[0].kind_of?(Symbol) ? 1..-1 : 0..-1
 
@@ -56,10 +56,24 @@ module Skeptic
           when :const_ref then extract_name(first)
           when :var_ref then extract_name(first)
           when :@const then first
+          when :@op then first
           when :@ident then first
           when :@kw then first
           when :@op then first
+          when :vcall then extract_name(first)
           else '<unknown>'
+        end
+      end
+
+      def extract_line_number(tree)
+        type, first, second = *tree
+        case type
+          when :const_path_ref then extract_line_number(first)
+          when :const_ref then extract_line_number(first)
+          when :var_ref then extract_line_number(first)
+          when :vcall then extract_line_number(first)
+          when :@const, :@op, :@ident then second.first
+          else 0
         end
       end
     end

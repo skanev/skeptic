@@ -9,6 +9,7 @@ module Skeptic
     table.register LinesPerMethod, :int
     table.register MaxNestingDepth, :int
     table.register MethodsPerClass, :int
+    table.register NamingConventions, :boolean
     table.register NoSemicolons, :boolean
     table.register NoGlobalVariables, :boolean
     table.register NoTrailingWhitespace, :boolean
