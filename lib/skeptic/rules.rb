@@ -13,5 +13,6 @@ module Skeptic
     table.register NoSemicolons, :boolean
     table.register NoGlobalVariables, :boolean
     table.register NoTrailingWhitespace, :boolean
+    table.register SpacesAroundOperators, :boolean
   end
 end
