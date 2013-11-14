@@ -1,4 +1,5 @@
 require 'ffi/aspell'
+require 'set'
 
 module Skeptic
   module Rules
@@ -7,8 +8,10 @@ module Skeptic
 
       include SexpVisitor
 
-      def initialize(ignore = '')
-        @ignore_words = ignore.split(' ')
+      PERMANENT_WORD_WHITELIST = Set.new ['args', 'kwargs']
+
+      def initialize(whitelist = '')
+        @word_whitelist = PERMANENT_WORD_WHITELIST.merge whitelist.split
         @violations = []
         @aspell_speller = FFI::Aspell::Speller.new 'en_US'
       end
@@ -30,12 +33,12 @@ module Skeptic
 
       private
 
-      on :class, :module do |name, *args, body|
+      on :class, :module do |name, *, body|
         check_ident name
         visit body
       end
 
-      on :def, :defs do |*args, name, params, body|
+      on :def, :defs do |*, name, params, body|
         check_ident name
         visit params
         visit body
@@ -51,20 +54,15 @@ module Skeptic
         visit body
       end
 
-      on :params do |unary_params, default_params , rest_params, *args, block_param|
-        unary_param_idents = extract_unary_param_idents unary_params
-
-        param_idents = unary_param_idents +
-                       default_params.to_a.map(&:first) +
-                       rest_params.to_a[1..-1].to_a +
-                       [block_param].compact
-
-        param_idents.each { |param_ident| check_ident param_ident }
-      end
-
       on :assign do |target, value|
         check_ident target
         visit value
+      end
+
+      on :params do |*params|
+        extract_param_idents(params).each do |param_ident|
+          check_ident param_ident
+        end
       end
 
       def check_ident(ident)
@@ -94,7 +92,7 @@ module Skeptic
       end
 
       def english_word?(word)
-        @ignore_words.include? word or @aspell_speller.correct? word
+        @word_whitelist.include? word or @aspell_speller.correct? word
       end
     end
   end
