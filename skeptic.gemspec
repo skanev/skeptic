@@ -5,17 +5,17 @@
 
 Gem::Specification.new do |s|
   s.name = "skeptic"
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Stefan Kanev"]
-  s.date = "2012-10-25"
+  s.date = "2013-11-14"
   s.description = "An experimental, half-assed, bug-ridden and highly opinionated code analyzer."
   s.email = "stefan.kanev@gmail.com"
   s.executables = ["skeptic"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.rdoc"
+    "README.markdown"
   ]
   s.files = [
     ".document",
@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
     ".rvmrc",
     "Gemfile",
     "LICENSE.txt",
-    "README.rdoc",
+    "README.markdown",
     "Rakefile",
     "VERSION",
     "bin/skeptic",
@@ -34,12 +34,16 @@ Gem::Specification.new do |s|
     "lib/skeptic/rule_table.rb",
     "lib/skeptic/rules.rb",
     "lib/skeptic/rules/check_syntax.rb",
+    "lib/skeptic/rules/english_words_for_names.rb",
     "lib/skeptic/rules/line_length.rb",
     "lib/skeptic/rules/lines_per_method.rb",
     "lib/skeptic/rules/max_nesting_depth.rb",
     "lib/skeptic/rules/methods_per_class.rb",
+    "lib/skeptic/rules/naming_conventions.rb",
+    "lib/skeptic/rules/no_global_variables.rb",
     "lib/skeptic/rules/no_semicolons.rb",
     "lib/skeptic/rules/no_trailing_whitespace.rb",
+    "lib/skeptic/rules/spaces_around_operators.rb",
     "lib/skeptic/scope.rb",
     "lib/skeptic/sexp_visitor.rb",
     "skeptic.gemspec"
@@ -61,6 +65,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<bundler>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<simplecov>, [">= 0"])
+      s.add_development_dependency(%q<ffi-aspell>, [">= 0"])
     else
       s.add_dependency(%q<trollop>, [">= 1.16.2"])
       s.add_dependency(%q<rspec>, [">= 0"])
@@ -69,6 +74,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<bundler>, [">= 0"])
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<simplecov>, [">= 0"])
+      s.add_dependency(%q<ffi-aspell>, [">= 0"])
     end
   else
     s.add_dependency(%q<trollop>, [">= 1.16.2"])
@@ -78,6 +84,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<bundler>, [">= 0"])
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<simplecov>, [">= 0"])
+    s.add_dependency(%q<ffi-aspell>, [">= 0"])
   end
 end
 
