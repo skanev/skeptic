@@ -56,6 +56,7 @@ module Skeptic
           when :const_ref then extract_name(first)
           when :var_ref then extract_name(first)
           when :@const then first
+          when :@op then first
           when :@ident then first
           when :@kw then first
           when :@op then first

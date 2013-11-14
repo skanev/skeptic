@@ -12,6 +12,7 @@ require 'skeptic/rules/no_semicolons'
 require 'skeptic/rules/line_length'
 require 'skeptic/rules/no_trailing_whitespace'
 require 'skeptic/rules/no_global_variables'
+require 'skeptic/rules/spaces_around_operators'
 
 require 'skeptic/rule_table'
 require 'skeptic/rules'
