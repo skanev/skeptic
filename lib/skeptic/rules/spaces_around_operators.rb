@@ -1,7 +1,7 @@
 module Skeptic
   module Rules
     class SpacesAroundOperators
-      DESCRIPTION = 'Spaces around operators'
+      DESCRIPTION = 'Check for spaces around operators'
 
       OPERATORS_WITHOUT_SPACES_AROUND_THEM = ['**']
 
