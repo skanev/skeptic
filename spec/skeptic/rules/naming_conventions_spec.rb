@@ -138,13 +138,15 @@ module Skeptic
           analyzer = analyze <<-RUBY
             class Lala_lala
               def HiThere
-                :laLa
+                'e'
+                :llLz
               end
             end
           RUBY
 
           analyzer.violations.should include 'class named Lala_lala on line 1 is not in CamelCase'
           analyzer.violations.should include 'method named HiThere on line 2 is not in snake_case'
+          analyzer.violations.should include 'symbol named llLz on line 4 is not in snake_case'
         end
 
         it 'can tell on which line is the bad name' do

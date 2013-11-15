@@ -6,6 +6,7 @@ source "http://rubygems.org"
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
 gem 'trollop', '>= 1.16.2'
+gem "ffi-aspell"
 
 group :development do
   gem "rspec"
@@ -14,6 +15,5 @@ group :development do
   gem "bundler"
   gem "jeweler"
   gem "simplecov"
-  gem "ffi-aspell"
 end
 
