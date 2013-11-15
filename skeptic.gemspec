@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Stefan Kanev"]
-  s.date = "2013-11-14"
+  s.date = "2013-11-15"
   s.description = "An experimental, half-assed, bug-ridden and highly opinionated code analyzer."
   s.email = "stefan.kanev@gmail.com"
   s.executables = ["skeptic"]
@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
     ".document",
     ".rspec",
     ".rvmrc",
+    "CHANGELOG.md",
     "Gemfile",
     "LICENSE.txt",
     "README.markdown",
@@ -51,7 +52,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/skanev/skeptic"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.24"
+  s.rubygems_version = "1.8.23"
   s.summary = "Skeptic points out annoying things in your code"
 
   if s.respond_to? :specification_version then
