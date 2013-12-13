@@ -6,6 +6,18 @@ I am using it for a [Ruby course in the University of Sofia](http://fmi.ruby.bg/
 
 You should probably not use it for anythin.
 
+## Installation
+
+Skeptic can be installed as a Ruby gem, either via `gem install sketic`, or better yet via Bundler.
+
+Make sure that you have the `aspell` package installed in your system, along with its shared libraries (`libaspell`). If you're on OS X, you can use [Homebrew](http://brew.sh/) to do that:
+
+    brew install aspell
+
+On other Linux/Unix distributions, you are free to use a package manager or another installation method of choice.
+
+For Windows systems, check out [GNU Aspell for Win32](http://aspell.net/win32/). Make sure to install the development libraries as well.
+
 ## Rules
 
 Skeptic checks if the code complies to a number of rules and reports the violations. Here is a list of the rules:
