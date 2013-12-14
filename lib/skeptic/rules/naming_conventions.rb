@@ -86,7 +86,7 @@ module Skeptic
 
       on :assign do |target, value|
         if target.first == :var_field
-          check_name target.last.first, extract_name(target), extract_line_number(target)
+          check_ident target.last.first, target
         end
       end
 
@@ -101,7 +101,9 @@ module Skeptic
       end
 
       def check_ident(type, ident)
-        check_name(type, extract_name(ident), extract_line_number(ident))
+        if EXPECTED_CONVENTIONS.key? type
+          check_name(type, extract_name(ident), extract_line_number(ident))
+        end
       end
 
       def check_name(type, name, line)

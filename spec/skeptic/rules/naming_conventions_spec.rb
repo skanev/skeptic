@@ -94,6 +94,10 @@ module Skeptic
           expect_bad_names_of(:defs, "def s.lF;end", 1)
         end
 
+        it "doesn't check global variables" do
+          expect_no_bad_names "$a = 'x'"
+        end
+
         it "doesn't check names which aren't introduced by the program" do
           #expect_no_bad_names "include Ens"
           expect_no_bad_names "f = kLeE"
