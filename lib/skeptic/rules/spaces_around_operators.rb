@@ -102,6 +102,10 @@ module Skeptic
           mark_special_tokens normal_params.first.last, normal_params.last.last
         end
       end
+
+      on :unary do |_, token|
+        mark_special_tokens token.last
+      end
     end
   end
 end
