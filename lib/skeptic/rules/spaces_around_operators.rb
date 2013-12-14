@@ -5,8 +5,8 @@ module Skeptic
 
       include SexpVisitor
 
-      OPERATORS_WITHOUT_SPACES_AROUND_THEM = ['**', '::']
-      IGNORED_TOKEN_TYPES = [:on_sp, :on_ignored_nl, :on_nl, :on_lparen]
+      OPERATORS_WITHOUT_SPACES_AROUND_THEM = ['**', '::', '...', '..']
+      IGNORED_TOKEN_TYPES = [:on_sp, :on_ignored_nl, :on_nl, :on_lparen, :on_symbeg]
 
       def initialize(data)
         @violations = []
@@ -19,8 +19,8 @@ module Skeptic
         @violations = tokens.each_cons(3).select do |_, token, _|
           operator_expecting_spaces? token
         end.select do |left, operator, right|
-          no_spaces_between?(operator, left) or
-          no_spaces_between?(operator, right)
+          no_spaces_on_left_of?(operator, left) or
+          no_spaces_on_right_of?(operator, right)
         end.map do |_, operator, _|
           [operator.last, operator.first[0]]
         end
@@ -44,8 +44,14 @@ module Skeptic
           not OPERATORS_WITHOUT_SPACES_AROUND_THEM.include? token.last
       end
 
-      def no_spaces_between?(operator, neighbour)
-        neighbour.first[0] == operator.first[0] and !special_token? neighbour
+      def no_spaces_on_left_of?(operator, neighbour)
+        neighbour.first[0] == operator.first[0] and neighbour[1] != :on_lparen and
+        !special_token? neighbour
+      end
+
+      def no_spaces_on_right_of?(operator, neighbour)
+        neighbour.first[0] == operator.first[0] and neighbour[1] != :on_rparen and
+        !special_token? neighbour
       end
 
       def whitespace_token?(token)
