@@ -54,8 +54,16 @@ module Skeptic
           expect_bad_names_of(:symbol, code, 4)
         end
 
+        it 'can find bad function names' do
+          expect_bad_names_of(:def, "def aZ;end", 1)
+        end
+
         it 'can find bad variable names' do
           expect_bad_names_of(:@ident, "aWeirdVar = 2", 1)
+        end
+
+        it 'can find bad global variable names' do
+          expect_bad_names_of(:@gvar, "$aI = 'wtf'", 1)
         end
 
         it 'can find bad instance variable names' do
@@ -99,7 +107,6 @@ module Skeptic
         end
 
         it "doesn't check names which aren't introduced by the program" do
-          #expect_no_bad_names "include Ens"
           expect_no_bad_names "f = kLeE"
           expect_no_bad_names "@w = KD_E"
           expect_no_bad_names "keeper.whatTheFuck"

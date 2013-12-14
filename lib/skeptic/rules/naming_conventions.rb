@@ -12,6 +12,7 @@ module Skeptic
         defs:      :snake_case,
         symbol:    :snake_case,
         :@ident => :snake_case,
+        :@gvar  => :snake_case,
         :@ivar  => :snake_case,
         :@cvar  => :snake_case,
         :@const => :screaming_snake_case
@@ -36,6 +37,7 @@ module Skeptic
         def:            'method',
         defs:           'method',
         :@ident      => 'local variable',
+        :@gvar       => 'global variable',
         :@ivar       => 'instance variable',
         :@cvar       => 'class variable',
         :@const      => 'constant'
