@@ -35,19 +35,19 @@ module Skeptic
         end
 
         it "checks for valid operators with spaces around em" do
-          rule = analyze code("pythoh + perl")
-
-          rule.should have(0).violations
+          expect_violations_count "pythoh + perl", 0
         end
 
         it "doesnt't check for spaces around **" do
-          rule = analyze code("2 **java")
+          expect_violations_count "2 **java", 0
+        end
 
-          rule.should have(0).violations
+        it "doesn't check for spaces around ::" do
+          expect_violations_count "W::A", 0
         end
 
         it "checks for multiple operators" do
-          rule = analyze code(<<-RUBY)
+          code = <<-RUBY
             a = 2 +f
             b = 4+ g
             c = x+2+5
@@ -55,13 +55,34 @@ module Skeptic
             f=2+z-z
           RUBY
 
-          rule.should have(7).violations
+          expect_violations_count code, 7
         end
 
         it "checks once for an operator" do
-          rule = analyze code("2+ z")
+          expect_violations_count "2+ z", 1
+        end
 
-          rule.should have(1).violations
+        it "doesn't check block arguments" do
+          expect_violations_count "a(&b)", 0
+          expect_violations_count "def a(&c); end", 0
+        end
+
+        it "doesnt't check splat arguments" do
+          expect_violations_count "a(*b)", 0
+          expect_violations_count "def a(*c, d); end", 0
+        end
+
+        it "doesn't check block as symbol arguments" do
+          expect_violations_count "a.map(&:to_s)", 0
+        end
+
+        it "doesn't check operator method names" do
+          expect_violations_count "def |(other);true;end", 0
+        end
+
+        it "doesn't check splatted variables in assignment" do
+          expect_violations_count "*a, b = [2, 3, 4]", 0
+          expect_violations_count "$a, b = [4, 5]", 0
         end
       end
 
@@ -69,6 +90,12 @@ module Skeptic
         it "reports under the name 'Spaces around operators'" do
           SpacesAroundOperators.new(nil).name.should eq 'Spaces around operators'
         end
+      end
+
+      def expect_violations_count(code, count)
+        rule = analyze(code)
+
+        rule.should have(count).violations
       end
 
       def analyze(code)
