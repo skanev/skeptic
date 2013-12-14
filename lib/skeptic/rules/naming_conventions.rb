@@ -63,47 +63,59 @@ module Skeptic
 
       private
 
-      on :class, :module, :def do |name, *args, body|
-        extracted_name = strip_name_suffix(extract_name(name))
-        check_name sexp_type, extracted_name, extract_line_number(name)
-        visit args.first if args.first
+      on :class, :module do |name, *, body|
+        check_ident sexp_type, name
         visit body
       end
 
-      on :defs do |target, _, name, params, body|
-        if [target, name].any? do |ident|
-            bad_name? :defs, strip_name_suffix(extract_name(ident))
-          end
-          @violations << [:defs, "#{target}.#{name}", extract_line_number(name)]
-        end
+      on :def, :defs do |*, name, params, body|
+        check_ident sexp_type, name
         visit params
         visit body
+      end
+
+      on :lambda do |params, body|
+        visit params if params
+        visit body
+      end
+
+      on :do_block, :brace_block do |(_, params, _), body|
+        visit params if params
+        visit body
+      end
+
+      on :assign do |target, value|
+        if target.first == :var_field
+          check_name target.last.first, extract_name(target), extract_line_number(target)
+        end
+      end
+
+      on :params do |*params|
+        extract_param_idents(params).each do |param_ident|
+          check_ident :@ident, param_ident
+        end
       end
 
       on :symbol do |type, text, location|
         check_name :symbol, text, location.first
       end
 
-      on :@ident, :@ivar, :@cvar, :@const do |text, location|
-        check_name sexp_type, strip_name_prefix(text), location.first
+      def check_ident(type, ident)
+        check_name(type, extract_name(ident), extract_line_number(ident))
       end
 
       def check_name(type, name, line)
-        if bad_name? type, name
+        if bad_name? type, strip_word_punctuation(name)
           @violations << [type, name, line]
         end
       end
 
       def bad_name?(type, name)
-        !CONVENTION_REGEXES[EXPECTED_CONVENTIONS[type]].match(name)
+        !name.empty? and !CONVENTION_REGEXES[EXPECTED_CONVENTIONS[type]].match(name)
       end
 
-      def strip_name_suffix(name)
-        name.sub(/[!?]\z/, '')
-      end
-
-      def strip_name_prefix(name)
-        name.sub(/\A@{1,2}/, '')
+      def strip_word_punctuation(word)
+        word.gsub(/[^[^[:ascii:]]a-zA-Z0-9_]/, '')
       end
     end
   end

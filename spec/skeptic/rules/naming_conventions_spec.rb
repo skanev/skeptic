@@ -94,6 +94,14 @@ module Skeptic
           expect_bad_names_of(:defs, "def s.lF;end", 1)
         end
 
+        it "doesn't check names which aren't introduced by the program" do
+          #expect_no_bad_names "include Ens"
+          expect_no_bad_names "f = kLeE"
+          expect_no_bad_names "@w = KD_E"
+          expect_no_bad_names "keeper.whatTheFuck"
+          expect_no_bad_names "d = Ens"
+        end
+
         it "doesn't give false positives" do
           code = <<-RUBY
             class CcC
@@ -114,7 +122,7 @@ module Skeptic
             end
           RUBY
 
-          analyze(code).violations.count.should eq 0
+          expect_no_bad_names code
         end
 
         it 'can find different kinds of bad names' do
@@ -127,7 +135,6 @@ module Skeptic
             end
           RUBY
 
-          expect_bad_names_of(:symbol, code, 1)
           expect_bad_names_of(:class, code, 1)
           expect_bad_names_of(:module, code, 1)
         end
@@ -164,7 +171,7 @@ module Skeptic
         end
 
         it 'can report different kind of naming mistakes' do
-          analyzer = analyze('fL = [@iVar, :sWd, @@lE]')
+          analyzer = analyze('fL = 2; @iVar = 2; :sWd; @@lE = [nil]')
 
           analyzer.violations[0].should include 'local variable'
           analyzer.violations[1].should include 'instance variable'
@@ -178,6 +185,11 @@ module Skeptic
           instance_variable_get("@violations").map(&:first).
           select { |violation_type| type == violation_type }.
           count.should eq count
+      end
+
+      def expect_no_bad_names(code)
+        analyze(code).
+          instance_variable_get("@violations").should be_empty
       end
 
       def analyze(code)
