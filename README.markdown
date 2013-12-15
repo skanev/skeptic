@@ -16,7 +16,7 @@ Make sure that you have the `aspell` package installed in your system, along wit
 
 On other Linux/Unix distributions, you are free to use a package manager or another installation method of choice.
 
-For Windows systems, check out [GNU Aspell for Win32](http://aspell.net/win32/). Make sure to install the development libraries as well.
+For Windows systems, check out [GNU Aspell for Win32](http://aspell.net/win32/). Install Aspell using the "Full Installer" linked in that page, then locate `aspell-15.dll` in the installation and copy it somewhere in your `PATH` as `aspell.dll`.
 
 ## Rules
 
