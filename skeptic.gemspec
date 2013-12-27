@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
     "lib/skeptic/rules/english_words_for_names.rb",
     "lib/skeptic/rules/line_length.rb",
     "lib/skeptic/rules/lines_per_method.rb",
+    "lib/skeptic/rules/max_method_arity.rb",
     "lib/skeptic/rules/max_nesting_depth.rb",
     "lib/skeptic/rules/methods_per_class.rb",
     "lib/skeptic/rules/naming_conventions.rb",
