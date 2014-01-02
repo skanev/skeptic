@@ -2,7 +2,7 @@ module Skeptic
   module Rules
     class MaxMethodArity
       DESCRIPTION = 'Limit the arguments count per method'
-      MAX_METHOD_ARITY = 7
+      MAX_METHOD_ARITY = 3
 
       include SexpVisitor
 
