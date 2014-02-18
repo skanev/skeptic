@@ -71,7 +71,7 @@ def display_file_criticism(criticism)
     end
     puts ""
   end
-  !criticism.empty?  
+  !criticism.empty?
 end
 
 has_errors = if Dir.exist? opts[:path]
@@ -81,7 +81,7 @@ else
 end
 
 if has_errors
-  puts 'NO FU'
+  puts 'Errors found'
   exit 1
 else
   puts 'OK'
