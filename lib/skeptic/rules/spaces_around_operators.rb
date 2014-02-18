@@ -94,7 +94,7 @@ module Skeptic
       end
 
       on :block_var do |params|
-        normal_params = params[1]
+        normal_params = params[1] || []
         unless normal_params.empty?
           right_param = normal_params.last
           right_location = [right_param.last[0],
