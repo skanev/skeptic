@@ -7,36 +7,60 @@ parser = Trollop::Parser.new do
   banner <<BANNER
 Points out annoying things in your Ruby code. Just run with:
 
-  skeptic [options] <path_to_file>
+  skeptic [options] <path>
 
-where [options] are:
+where
+<path> is a path to a file or a directory\
+(which would be checked recursively) and
+[options] are:
 BANNER
   Skeptic::Rules.table.each_rule do |klass, slug, option_type, description|
     opt slug, description, type: option_type
   end
-  opt :file, 'Path to file to analyze', type: :string
+  opt :path, 'Path to file/directory to analyze', type: :string
 end
 
 opts = Trollop::with_standard_exception_handling parser do
   parsed = parser.parse ARGV
-  parsed[:file] ||= ARGV.shift unless parsed[:file_given]
-  raise Trollop::HelpNeeded unless parsed[:file]
+  parsed[:path] ||= ARGV.shift unless parsed[:path_given]
+  raise Trollop::HelpNeeded unless parsed[:path]
   raise Trollop::CommandlineError, "excessive arguments: #{ARGV.join(' ')}" unless ARGV.empty?
-  raise Trollop::CommandlineError, "file does not exist: #{parsed[:file]}" unless File.exist? parsed[:file]
+  raise Trollop::CommandlineError, "resource does not exist: #{parsed[:path]}" unless File.exist? parsed[:path]
   parsed
 end
 
-code = File.read opts[:file]
-critic = Skeptic::Critic.new opts.select { |key, value| Skeptic::Rules.table.slugs.include? key }
-critic.criticize code
+CRITIC_OPTS = opts.select { |key, value| Skeptic::Rules.table.slugs.include? key }
 
-if critic.criticism.empty?
-  puts 'OK'
-  exit(0)
-else
+def criticize_file(path)
+  code = File.read path
+  critic = Skeptic::Critic.new CRITIC_OPTS
+  critic.criticize code
+  critic.criticism
+end
+
+def criticize_directory(path)
+  Dir["#{path}/**/*.rb"].map do |file|
+    [file, criticize_file(file)]
+  end
+end
+
+def display_directory_criticism(criticism)
+  has_errors = false
+  criticism.each do |filename, file_criticism|
+    unless file_criticism.empty?
+      puts "#{filename} :\n\n"
+      display_file_criticism file_criticism
+      has_errors = true
+    end
+  end
+
+  puts "#{criticism.count} files checked"
+  has_errors
+end
+
+def display_file_criticism(criticism)
   messages = Hash.new { |hash, key| hash[key] = [] }
-
-  critic.criticism.each do |message, type|
+  criticism.each do |message, type|
     messages[type] << message
   end
 
@@ -47,6 +71,21 @@ else
     end
     puts ""
   end
-
-  exit(1)
+  !criticism.empty?  
 end
+
+has_errors = if Dir.exist? opts[:path]
+  display_directory_criticism criticize_directory opts[:path]
+else
+  display_file_criticism criticize_file opts[:path]
+end
+
+if has_errors
+  puts 'NO FU'
+  exit 1
+else
+  puts 'OK'
+  exit 0
+end
+
+
