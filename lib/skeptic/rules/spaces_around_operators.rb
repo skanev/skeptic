@@ -6,7 +6,7 @@ module Skeptic
       include SexpVisitor
 
       OPERATORS_WITHOUT_SPACES_AROUND_THEM = ['**', '::', '...', '..']
-      IGNORED_TOKEN_TYPES = [:on_sp, :on_ignored_nl, :on_nl, :on_lparen, :on_symbeg]
+      IGNORED_TOKEN_TYPES = [:on_sp, :on_ignored_nl, :on_nl, :on_lparen, :on_symbeg, :on_lbracket, :on_lbrace]
 
       def initialize(data)
         @violations = []

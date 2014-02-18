@@ -62,6 +62,11 @@ module Skeptic
           expect_violations_count "2+ z", 1
         end
 
+        it "doesn't check unary operators near brackets" do
+          expect_violations_count "{:up => [-1, 1]}", 0
+          expect_violations_count "{-1 => 2}", 0          
+        end
+
         it "doesn't check block arguments" do
           expect_violations_count "a(&b)", 0
           expect_violations_count "def a(&c); end", 0
