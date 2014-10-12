@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Stefan Kanev"]
-  s.date = "2013-12-14"
+  s.date = "2013-12-27"
   s.description = "An experimental, half-assed, bug-ridden and highly opinionated code analyzer."
   s.email = "stefan.kanev@gmail.com"
   s.executables = ["skeptic"]
@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
     "lib/skeptic/rules/english_words_for_names.rb",
     "lib/skeptic/rules/line_length.rb",
     "lib/skeptic/rules/lines_per_method.rb",
+    "lib/skeptic/rules/max_method_arity.rb",
     "lib/skeptic/rules/max_nesting_depth.rb",
     "lib/skeptic/rules/methods_per_class.rb",
     "lib/skeptic/rules/naming_conventions.rb",
@@ -53,7 +54,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/skanev/skeptic"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "2.1.5"
+  s.rubygems_version = "2.1.6"
   s.summary = "Skeptic points out annoying things in your code"
 
   if s.respond_to? :specification_version then

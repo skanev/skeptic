@@ -15,5 +15,6 @@ module Skeptic
     table.register NoGlobalVariables, :boolean
     table.register NoTrailingWhitespace, :boolean
     table.register SpacesAroundOperators, :boolean
+    table.register MaxMethodArity, :int
   end
 end

@@ -15,6 +15,7 @@ require 'skeptic/rules/english_words_for_names'
 require 'skeptic/rules/naming_conventions'
 require 'skeptic/rules/no_global_variables'
 require 'skeptic/rules/spaces_around_operators'
+require 'skeptic/rules/max_method_arity'
 
 require 'skeptic/rule_table'
 require 'skeptic/rules'
