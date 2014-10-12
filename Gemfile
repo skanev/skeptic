@@ -9,7 +9,7 @@ gem 'trollop', '>= 1.16.2'
 gem "ffi-aspell"
 
 group :development do
-  gem "rspec"
+  gem "rspec", "2.14.1"
   gem "cucumber"
   gem "aruba"
   gem "bundler"
