@@ -106,7 +106,7 @@ module Skeptic
       end
 
       on :case do |testable, alternatives|
-        visit testable
+        visit testable unless testable.nil?
 
         with scope.push(:case) do
           visit alternatives

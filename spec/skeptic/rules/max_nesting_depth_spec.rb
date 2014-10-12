@@ -61,6 +61,10 @@ module Skeptic
           expect_deepest_nesting :case, :if, 'case a; when b; else; d if e?; end'
         end
 
+        it "counts case statements without a testable as a level of nesting" do
+          expect_deepest_nesting :case, :if, 'case; when true; a if b?; end'
+        end
+        
         it "counts begin blocks as a level of nesting" do
           expect_deepest_nesting :begin, :if, 'begin; a if b; end'
         end
