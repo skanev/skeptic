@@ -18,6 +18,8 @@ On other Linux/Unix distributions, you are free to use a package manager or anot
 
 For Windows systems, check out [GNU Aspell for Win32](http://aspell.net/win32/). Install Aspell using the "Full Installer" linked in that page, then locate `aspell-15.dll` in the installation and copy it somewhere in your `PATH` as `aspell.dll`.
 
+**A lot of people miss that**. You need to install an english dictionary from the list in the aspell home page(precompiled dictionaries section). Otherwise aspell will crash with segmentation fault if you try to use the `english-words-for-names' check.  
+
 ## Rules
 
 Skeptic checks if the code complies to a number of rules and reports the violations. Here is a list of the rules:
