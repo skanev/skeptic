@@ -14,6 +14,12 @@ Make sure that you have the `aspell` package installed in your system, along wit
 
     brew install aspell
 
+You may have to set the following ruby ENV variables. You can do this by adding them to your shell initialization file.
+
+    export LANGUAGE=en_US.UTF-8
+    export LC_CTYPE=en_US.UTF-8
+    export LC_ALL=en_US.UTF-8
+
 On other Linux/Unix distributions, you are free to use a package manager or another installation method of choice.
 
 For Windows systems, check out [GNU Aspell for Win32](http://aspell.net/win32/). Install Aspell using the "Full Installer" linked in that page, then locate `aspell-15.dll` in the installation and copy it somewhere in your `PATH` as `aspell.dll`.
