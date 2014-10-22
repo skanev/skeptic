@@ -81,6 +81,12 @@ module Skeptic
               mark_special_tokens symbol_location
             when :vcall, :var_ref
               mark_special_tokens block.last.last
+            when :call
+              token = block
+              while token.first == :call
+                token = token[1]
+              end
+              mark_special_tokens token.last.last
           end
         end
       end
