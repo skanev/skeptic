@@ -1,3 +1,8 @@
+## 0.0.9 (2014-10-24)
+
+Bigfixes:
+  - Fix issue with passing method chain as block ([s2gatev](https://github.com/s2gatev))
+
 ## 0.0.8 (2014-10-12)
 
 Features:
