@@ -86,7 +86,7 @@ module Skeptic
             [tree]
           when Symbol
             []
-          when nil
+          when nil, false
             []
           else
             tree.compact.map { |node| extract_param_idents node }.reduce [], :+

@@ -91,6 +91,13 @@ module Skeptic
             end
           RUBY
         end
+
+        it "catches violations for methods with mixed positional and keyword arguments" do
+          do_not_expect_complaint 2, <<-RUBY
+            def foo(a, b:)
+            end
+          RUBY
+        end
       end
 
       describe "reporting" do
