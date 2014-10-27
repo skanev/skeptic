@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'spec_helper'
 
 module Skeptic
@@ -68,6 +67,27 @@ module Skeptic
           do_not_expect_complaint 2, <<-RUBY
             class Foo
               def foo(x, y); end
+            end
+          RUBY
+        end
+
+        it "catches violations for top-level methods" do
+          expect_complaint 1, <<-RUBY
+            def lala(s, d)
+            end
+          RUBY
+        end
+
+        it "catches violations for top-level self. methods" do
+          expect_complaint 2, <<-RUBY
+            def self.la(s, d, f)
+            end
+          RUBY
+
+          expect_complaint 0, <<-RUBY
+            class << self
+              def s2(s)
+              end
             end
           RUBY
         end

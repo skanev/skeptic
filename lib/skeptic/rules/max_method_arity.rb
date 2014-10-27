@@ -29,22 +29,22 @@ module Skeptic
       private
 
       on :class do |name, parents, body|
-        env.push :module => qualified_class_name(name)
+        env.push module: qualified_class_name(name)
         visit body
 
         env.pop
       end
 
       on :module do |name, body|
-        env.push :module => qualified_class_name(name)
+        env.push module: qualified_class_name(name)
         visit body
 
         env.pop
       end
 
       on :def do |name, params, _|
-        qualified_method_name = env[:module] + '#' + extract_name(name)
-        env.push :method => qualified_method_name
+        qualified_method_name = (env[:module] || '') + '#' + extract_name(name)
+        env.push method: qualified_method_name
 
         visit params
 
@@ -54,10 +54,10 @@ module Skeptic
       on :defs do |target, separator, name, params, body|
         method_name = extract_name(name)
         class_name  = extract_name(target)
-        class_name  = env[:module] if class_name == 'self'
+        class_name  = (env[:module] || '') if class_name == 'self'
 
         qualified_method_name = class_name + '.' + method_name
-        env.push :method => qualified_method_name
+        env.push method: qualified_method_name
 
         visit params
 
