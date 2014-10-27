@@ -43,7 +43,9 @@ module Skeptic
       end
 
       on :def do |name, params, _|
-        qualified_method_name = env[:module] + '#' + extract_name(name)
+        qualified_method_name = extract_name(name)
+        qualified_method_name.prepend(env[:module] + '#') if env[:module]
+
         env.push :method => qualified_method_name
 
         visit params

@@ -10,7 +10,13 @@ module Skeptic
         subject { MaxMethodArity.new }
       end
 
-       describe "limiting method arity" do
+      describe "limiting method arity" do
+        it "works with for method without parameters outside class" do
+          do_not_expect_complaint limit, <<-RUBY
+            def bar; end
+          RUBY
+        end
+
         it "works with for a method without parameters" do
           do_not_expect_complaint limit, <<-RUBY
             class Foo
@@ -61,6 +67,12 @@ module Skeptic
               def foo(x, y); end
               def bar(a, b, c); end
             end
+          RUBY
+        end
+
+        it "catches violations for method outside class" do
+          expect_complaint 1, <<-RUBY
+            def bar(a, b, c); end
           RUBY
         end
 
