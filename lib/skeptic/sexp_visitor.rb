@@ -77,19 +77,18 @@ module Skeptic
 
       def extract_param_idents(tree)
         type, first, second = *tree
+        
         case type
           when :params, :mlhs_add_star
-            tree[1..-1].compact.map { |node| extract_param_idents node }.reduce [], :+
+            tree[1..-1].select { |e| e }.map { |node| extract_param_idents node }.reduce [], :+
           when :mlhs_paren, :blockarg, :rest_param
             extract_param_idents first
           when :@ident, :@label
             [tree]
           when Symbol
             []
-          when nil, false
-            []
           else
-            tree.compact.map { |node| extract_param_idents node }.reduce [], :+
+            tree.select { |e| e }.map { |node| extract_param_idents node }.reduce [], :+
         end
       end
     end

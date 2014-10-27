@@ -97,6 +97,11 @@ module Skeptic
             def foo(a, b:)
             end
           RUBY
+
+          expect_complaint 0, <<-RUBY
+            def foo(b:)
+            end
+          RUBY
         end
       end
 
