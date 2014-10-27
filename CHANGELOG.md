@@ -1,6 +1,11 @@
+## 0.0.10 (2014-10-27)
+
+Bugfixes:
+  - Fix handling of top-level methods in max-method-arity
+
 ## 0.0.9 (2014-10-24)
 
-Bigfixes:
+Bugfixes:
   - Fix issue with passing method chain as block ([s2gatev](https://github.com/s2gatev))
 
 ## 0.0.8 (2014-10-12)
