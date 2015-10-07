@@ -34,8 +34,14 @@ Skeptic checks if the code complies to a number of rules and reports the violati
 * **Line length** - line length does not exceed a certain number.
 * **Lines per method** - methods are at most N lines long. Ignores empty lines and lines with `end`
 * **Max nesting depth** - at most N levels of nesting. Blocks, conditions and loops are considered a level of nesting.
+* **Methods per class** - the number of methods per class does not exceed a certain number
 * **No semicolons** - stops you from using semicolons as expression delimiters.
 * **No trailing whitespace** - points out if your lines end on whitespace.
+* **Naming conventions** - checks if the names of variables/methods/classes follow the conventions
+* **No global variables** - does not allow the use of global variables
+* **Max method arity** - limits the arguments count per method
+* **Spaces around operators** - checks for spaces around operators
+* **English words for names** - detection of non-English words in names
 
 ## Copyright
 
