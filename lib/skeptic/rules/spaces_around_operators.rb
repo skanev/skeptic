@@ -7,6 +7,8 @@ module Skeptic
 
       OPERATORS_WITHOUT_SPACES_AROUND_THEM = ['**', '::', '...', '..']
       IGNORED_TOKEN_TYPES = [:on_sp, :on_ignored_nl, :on_nl, :on_lparen, :on_symbeg, :on_lbracket, :on_lbrace]
+      LEFT_LIMIT_TOKEN_TYPES = [:on_lparen, :on_lbracket]
+      RIGHT_LIMIT_TOKEN_TYPES = [:on_rparen, :on_rbracket]
 
       def initialize(data)
         @violations = []
@@ -19,8 +21,7 @@ module Skeptic
         @violations = tokens.each_cons(3).select do |_, token, _|
           operator_expecting_spaces? token
         end.select do |left, operator, right|
-          no_spaces_on_left_of?(operator, left) or
-          no_spaces_on_right_of?(operator, right)
+          no_spaces_around? operator, left, right
         end.map do |_, operator, _|
           [operator.last, operator.first[0]]
         end
@@ -44,18 +45,36 @@ module Skeptic
           not OPERATORS_WITHOUT_SPACES_AROUND_THEM.include? token.last
       end
 
+      def no_spaces_around?(operator, left, right)
+        if LEFT_LIMIT_TOKEN_TYPES.include?(left[1])
+          mark_special_tokens right.first
+        end
+        if range_operator?(left)
+          mark_special_tokens left.last
+        end
+        no_spaces_on_left_of?(operator, left) or
+        no_spaces_on_right_of?(operator, right)
+      end
+
       def no_spaces_on_left_of?(operator, neighbour)
-        neighbour.first[0] == operator.first[0] and neighbour[1] != :on_lparen and
-        !special_token? neighbour
+        neighbour.first[0] == operator.first[0] and
+        !LEFT_LIMIT_TOKEN_TYPES.include?(neighbour[1]) and
+        !range_operator?(neighbour) and
+        !special_token?(neighbour)
       end
 
       def no_spaces_on_right_of?(operator, neighbour)
-        neighbour.first[0] == operator.first[0] and neighbour[1] != :on_rparen and
-        !special_token? neighbour
+        neighbour.first[0] == operator.first[0] and
+        !RIGHT_LIMIT_TOKEN_TYPES.include?(neighbour[1]) and
+        !special_token?(neighbour)
       end
 
       def whitespace_token?(token)
         token[1] == :on_sp or token[1] == :on_ignored_nl
+      end
+
+      def range_operator?(operator)
+        operator.last[0..1] == '..'
       end
 
       def mark_special_tokens(*token_locations)

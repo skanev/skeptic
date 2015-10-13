@@ -91,6 +91,18 @@ module Skeptic
           expect_violations_count "*a, b = [2, 3, 4]", 0
           expect_violations_count "$a, b = [4, 5]", 0
         end
+
+        it "doesn't check range operators" do
+          expect_violations_count "[2..4]", 0
+        end
+
+        it "doesn't check unary operators near ranges" do
+          expect_violations_count "[2..-1]", 0
+        end
+
+        it "doesn't check unary operators near left brackets" do
+          expect_violations_count '[*z]', 0
+        end
       end
 
       describe "reporting" do
