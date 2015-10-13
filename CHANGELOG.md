@@ -1,3 +1,7 @@
+## 0.0.12 (2015-10-14)
+Bugfixes:
+  - Fix range operators handling and stop detecting splat operators in beginning of collection literals
+
 ## 0.0.11 (2014-10-27)
 Bugfixes:
   - Fix issue with using mixed parameter types ([s2gatev](https://github.com/s2gatev))
