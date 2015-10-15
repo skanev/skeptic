@@ -103,6 +103,14 @@ module Skeptic
         it "doesn't check unary operators near left brackets" do
           expect_violations_count '[*z]', 0
         end
+
+        it "doesn't check unary operators" do
+          expect_violations_count 'z = !n.odd?', 0
+        end
+
+        it "doesnt't report as violations conditions with special unary operators" do
+          expect_violations_count '0..-5 || !n.odd?', 0
+        end
       end
 
       describe "reporting" do

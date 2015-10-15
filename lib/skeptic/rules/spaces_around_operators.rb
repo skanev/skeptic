@@ -9,14 +9,18 @@ module Skeptic
       IGNORED_TOKEN_TYPES = [:on_sp, :on_ignored_nl, :on_nl, :on_lparen, :on_symbeg, :on_lbracket, :on_lbrace]
       LEFT_LIMIT_TOKEN_TYPES = [:on_lparen, :on_lbracket]
       RIGHT_LIMIT_TOKEN_TYPES = [:on_rparen, :on_rbracket]
+      WHITESPACE_TOKEN_TYPES = [:on_sp, :on_nl, :on_ignored_nl]
 
       def initialize(data)
         @violations = []
         @special_tokens_locations = []
+        @unary_token_locations = []
       end
 
       def apply_to(code, tokens, sexp)
         visit sexp
+
+        mark_unary tokens
 
         @violations = tokens.each_cons(3).select do |_, token, _|
           operator_expecting_spaces? token
@@ -46,6 +50,8 @@ module Skeptic
       end
 
       def no_spaces_around?(operator, left, right)
+        return false if unary_operator?(operator)
+
         if LEFT_LIMIT_TOKEN_TYPES.include?(left[1])
           mark_special_tokens right.first
         end
@@ -69,10 +75,6 @@ module Skeptic
         !special_token?(neighbour)
       end
 
-      def whitespace_token?(token)
-        token[1] == :on_sp or token[1] == :on_ignored_nl
-      end
-
       def range_operator?(operator)
         operator.last[0..1] == '..'
       end
@@ -84,6 +86,25 @@ module Skeptic
       def special_token?(token)
         IGNORED_TOKEN_TYPES.include? token[1] or
           @special_tokens_locations.include? token.first
+      end
+
+      def unary_operator?(token)
+        token[1] == :on_op and @unary_token_locations.include?(token[0])
+      end
+
+      def mark_unary(tokens)
+        @unary_token_locations = []
+        last_significant_token = nil
+        tokens.each do |token|
+          if token[1] == :on_op
+            if last_significant_token == :on_op
+              @unary_token_locations << token[0]
+            end
+            last_significant_token = :on_op
+          elsif !WHITESPACE_TOKEN_TYPES.include?(token[1])
+            last_significant_token = token[1]
+          end
+        end
       end
 
       on :blockarg, :rest_param do |ident|
