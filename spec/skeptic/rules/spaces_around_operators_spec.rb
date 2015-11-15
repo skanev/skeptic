@@ -111,6 +111,19 @@ module Skeptic
         it "doesnt't report as violations conditions with special unary operators" do
           expect_violations_count '0..-5 || !n.odd?', 0
         end
+
+        it "doesn't report as violations unary operators that start lines" do
+          code = <<-CODE
+def a()
+  !b
+end
+CODE
+          expect_violations_count code, 0
+        end
+
+        it "doesn't report as violations unary operators that follow a ;" do
+          expect_violations_count 'def a(); !b; end', 0
+        end
       end
 
       describe "reporting" do

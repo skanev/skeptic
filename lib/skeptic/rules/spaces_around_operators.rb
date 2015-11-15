@@ -9,7 +9,7 @@ module Skeptic
       IGNORED_TOKEN_TYPES = [:on_sp, :on_ignored_nl, :on_nl, :on_lparen, :on_symbeg, :on_lbracket, :on_lbrace]
       LEFT_LIMIT_TOKEN_TYPES = [:on_lparen, :on_lbracket]
       RIGHT_LIMIT_TOKEN_TYPES = [:on_rparen, :on_rbracket]
-      WHITESPACE_TOKEN_TYPES = [:on_sp, :on_nl, :on_ignored_nl]
+      WHITESPACE_TOKEN_TYPES = [:on_sp]
 
       def initialize(data)
         @violations = []
@@ -97,7 +97,7 @@ module Skeptic
         last_significant_token = nil
         tokens.each do |token|
           if token[1] == :on_op
-            if last_significant_token == :on_op
+            if [:on_op, :on_semicolon, :on_ignored_nl].include?(last_significant_token)
               @unary_token_locations << token[0]
             end
             last_significant_token = :on_op
