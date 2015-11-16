@@ -1,3 +1,11 @@
+## 0.0.15 (2015-11-16)
+Bugfixes:
+  - Fix unary operators that start lines handling ([s2gatev](https://github.com/s2gatev))
+
+## 0.0.14 (2015-10-16)
+Bugfixes:
+  - Fix unary operators false positives
+
 ## 0.0.12 (2015-10-14)
 Bugfixes:
   - Fix range operators handling and stop detecting splat operators in beginning of collection literals
