@@ -1,3 +1,7 @@
+## 0.0.16 (2015-11-21)
+Bugfixes:
+  - Stop reporting double negation operator as a space-around-operators violation
+
 ## 0.0.15 (2015-11-16)
 Bugfixes:
   - Fix unary operators that start lines handling ([s2gatev](https://github.com/s2gatev))

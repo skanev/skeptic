@@ -71,6 +71,7 @@ module Skeptic
 
       def no_spaces_on_right_of?(operator, neighbour)
         neighbour.first[0] == operator.first[0] and
+        !double_negation_operator?(operator, neighbour) and
         !RIGHT_LIMIT_TOKEN_TYPES.include?(neighbour[1]) and
         !special_token?(neighbour)
       end
@@ -79,6 +80,10 @@ module Skeptic
         operator.last[0..1] == '..'
       end
 
+      def double_negation_operator?(token, other)
+        token.last == '!' and other.last == '!'
+      end
+      
       def mark_special_tokens(*token_locations)
         @special_tokens_locations.concat(token_locations)
       end

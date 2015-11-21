@@ -124,6 +124,15 @@ CODE
         it "doesn't report as violations unary operators that follow a ;" do
           expect_violations_count 'def a(); !b; end', 0
         end
+
+        it "doesn't report as violations !!" do
+          code = <<-RUBY
+            def w
+              !!value
+            end
+          RUBY
+          expect_violations_count code, 0
+        end
       end
 
       describe "reporting" do
