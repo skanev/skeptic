@@ -22,9 +22,9 @@ You may have to set the following ruby ENV variables. You can do this by adding 
 
 On other Linux/Unix distributions, you are free to use a package manager or another installation method of choice.
 
-For Windows systems, check out [GNU Aspell for Win32](http://aspell.net/win32/). Install Aspell using the "Full Installer" linked in that page, then locate `aspell-15.dll` in the installation and copy it somewhere in your `PATH` as `aspell.dll`.
+For Windows systems, check out [GNU Aspell for Win32](http://aspell.net/win32/). Install Aspell using the "Full Installer" linked in that page, then locate `aspell-15.dll` in the installation (usually in `C:\Program Files (x86)\Aspell\bin`) and copy it in the same folder as `aspell.dll`. After that, add the path to `aspell.dll` in your `PATH` environment variable (again, you'd usually have to add `C:\Program Files (x86)\Aspell\bin`). These instructions have been verified to work with a 32-bit version of Ruby. They might not be applicable to a 64-bit Ruby installation.
 
-**A lot of people miss that**. You need to install an english dictionary from the list in the aspell home page(precompiled dictionaries section). Otherwise aspell will crash with segmentation fault if you try to use the `english-words-for-names' check.  
+**A lot of people miss that**. You need to install an English dictionary from the list in the Aspell home page (precompiled dictionaries section). Otherwise Aspell will crash with segmentation fault if you try to use the `english-words-for-names' check.  
 
 ## Rules
 
